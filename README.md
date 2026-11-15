@@ -2,24 +2,19 @@
 
 El primer servicio, `mensajeria-service`, guarda y administra los mensajes de Contacto. El frontend puede enviar peticiones JSON desde el formulario de React y consultar el listado desde administración.
 
-## Ejecutar en Windows
+## Ejecutar en Visual Studio Code
 
-1. Enciende MySQL y crea una base vacía para este servicio.
+1. Inicia MySQL en Laragon. Si aún no creaste la base, ejecuta en MySQL lo siguiente.
 
    ```sql
    CREATE DATABASE mensajeria;
    ```
 
-2. Con MySQL de Laragon iniciado, ejecuta el servicio en PowerShell.
+2. En VS Code, abre `MensajeriaServiceApplication.java` y pulsa **Run** sobre `main`.
 
-   ```powershell
-   cd mensajeria-service
-   .\mvnw.cmd spring-boot:run
-   ```
+3. Abre [la API de contactos](http://127.0.0.1:8082/api/contactos). Si aparece `[]`, el backend está funcionando y aún no hay mensajes.
 
-   Se necesita JDK 17 o superior. El Maven Wrapper descarga Maven cuando lo ejecutas por primera vez. El servicio escucha en `127.0.0.1:8082` y usa MySQL en `127.0.0.1:3306`. Si el puerto o la base difieren, ajusta `DB_URL`. Flyway aplica las migraciones pendientes al arrancar y Hibernate comprueba el esquema.
-
-   La configuración local usa el usuario `root` sin contraseña. Si tu instalación tiene otras credenciales, define `DB_USER` y `DB_PASSWORD` en la terminal antes de arrancar.
+Flyway crea las tablas al iniciar el backend.
 
 ## Probar en Postman
 
@@ -55,4 +50,4 @@ Las migraciones `V1` y `V2` siguen el orden del ejemplo de clase. La primera cre
 - `dto`: define y valida los datos de entrada.
 - `src/main/resources/db/migration`: contiene el SQL versionado que ejecuta Flyway.
 
-Desde `mensajeria-service`, ejecuta `.\mvnw.cmd test` para comprobar el arranque con una base de pruebas en memoria. La API es para desarrollo local y sus operaciones administrativas aún requieren autenticación antes de exponerlas a otras personas.
+Para comprobar el arranque con una base de pruebas en memoria, abre `MensajeriaServiceApplicationTests.java` y pulsa **Run Test** sobre `contextLoads`. La API es para desarrollo local y sus operaciones administrativas aún requieren autenticación antes de exponerlas a otras personas.
