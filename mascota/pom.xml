@@ -8,7 +8,7 @@
 		<version>4.1.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.mascota</groupId>
+	<groupId>cl.veterinariasanmarcos.mascota</groupId>
 	<artifactId>mascota</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>

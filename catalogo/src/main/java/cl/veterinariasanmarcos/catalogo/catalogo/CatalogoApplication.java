@@ -1,13 +1,13 @@
-package com.mascota.mascota;
+package cl.veterinariasanmarcos.catalogo.catalogo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MascotaApplication {
+public class CatalogoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MascotaApplication.class, args);
+		SpringApplication.run(CatalogoApplication.class, args);
 	}
 
 }
