@@ -1,4 +1,4 @@
-package cl.veterinariasanmarcos.catalogo.model;
+package cl.veterinariasanmarcos.catalogo.catalogo.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,6 +24,10 @@ public class Catalogo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotBlank(message = "Debe ingresar un código")
+    @Column(nullable = false, length = 20, unique = true)
+    private String codigo;
 
     @NotBlank(message = "Debe ingresar una categoría")
     @Column(nullable = false, length = 50)

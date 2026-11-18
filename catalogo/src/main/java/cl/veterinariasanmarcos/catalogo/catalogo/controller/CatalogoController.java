@@ -79,7 +79,7 @@ public class CatalogoController {
     public List<Catalogo> buscarPorCategoria(
             @RequestParam String categoria) {
 
-        return service.buscarPorCategoria(categoria);
+        return service.buscarPorTipo(categoria);
     }
 
     @Operation(summary = "Actualizar producto", description = "Cambia los datos de un producto")
