@@ -1,5 +1,36 @@
 # Veterinaria San Marcos Backend
 
+## Servicios
+
+| Servicio | Clase que debes ejecutar con Run en VS Code | Base MySQL | Puerto |
+|---|---|---|---|
+| Mensajería | `MensajeriaServiceApplication` | `mensajeria` | 8082 |
+| Productos e inventario | `ProductosApplication` | `productos` | 8086 |
+| Compras y pedidos | `PedidosApplication` | `pedidos` | 8087 |
+
+Para iniciar los dos servicios nuevos, activa MySQL en Laragon y crea las bases.
+
+```sql
+CREATE DATABASE productos;
+CREATE DATABASE pedidos;
+```
+
+Ejecuta primero `ProductosApplication` y después `PedidosApplication`. Los dos tienen su propio `pom.xml` y sus carpetas `controller`, `service`, `repository`, `model` y `dto`. Pedidos también tiene `client`, donde está la conexión HTTP con Productos.
+
+El listado y el detalle consultan la misma información de Productos. Las compras y su historial se guardan en Pedidos. Cada servicio es dueño de sus tablas y Flyway aplica sus propias migraciones.
+
+En React, las consultas de productos conservan el puerto 8086. Las peticiones a `/api/pedidos` pasan al puerto 8087. La integración del frontend con estas dos APIs corresponde al siguiente paso.
+
+Si una compra o cancelación queda pendiente por una interrupción, conserva el `pedidoId` y reintenta esa operación. El README de Pedidos describe las rutas de recuperación. Incluimos pruebas de compra, stock, precios, cancelación, concurrencia y fallos de conexión.
+
+## Conservar datos anteriores de tienda
+
+La base `tienda` conserva sus datos. Para trasladar productos y compras anteriores, arranca ambos servicios una vez y luego detenlos. Antes de utilizar las bases nuevas, revisa y ejecuta `migrar_datos_tienda.sql` en MySQL. El script copia el stock actual, los pedidos y sus precios históricos. También registra las reservas anteriores para permitir cancelar compras sin descontar ni devolver stock dos veces.
+
+La importación sustituye el catálogo de ejemplo de `productos` por el catálogo de `tienda`. Debe ejecutarse sobre las bases nuevas, con todas las aplicaciones detenidas. Crea una copia de seguridad si las bases contienen información que necesites conservar.
+
+Las siguientes instrucciones corresponden al servicio de Mensajería.
+
 El primer servicio, `mensajeria-service`, guarda y administra los mensajes de Contacto. El frontend puede enviar peticiones JSON desde el formulario de React y consultar el listado desde administración.
 
 ## Ejecutar en Visual Studio Code
@@ -48,6 +79,6 @@ Las migraciones `V1` y `V2` siguen el orden del ejemplo de clase. La primera cre
 - `repository`: accede a MySQL mediante Spring Data JPA.
 - `model`: define la entidad en Java.
 - `dto`: define y valida los datos de entrada.
-- `src/main/resources/db/migration`: contiene el SQL versionado que ejecuta Flyway.
+- `src/main/resources/db/migracion`: contiene el SQL versionado que ejecuta Flyway.
 
 Para comprobar el arranque con una base de pruebas en memoria, abre `MensajeriaServiceApplicationTests.java` y pulsa **Run Test** sobre `contextLoads`. La API es para desarrollo local y sus operaciones administrativas aún requieren autenticación antes de exponerlas a otras personas.

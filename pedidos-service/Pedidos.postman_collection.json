@@ -1,0 +1,141 @@
+{
+  "info": {
+    "name": "Pedidos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8087"
+    },
+    {
+      "key": "pedidoId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Crear pedido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/pedidos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombreCompleto\": \"Cliente de prueba\",\n  \"correo\": \"cliente@example.com\",\n  \"direccion\": \"Av. Brasil 2140, Rancagua\",\n  \"metodo\": \"Transferencia\",\n  \"productos\": [\n    {\n      \"codigo\": \"ME001\",\n      \"cantidad\": 2\n    },\n    {\n      \"codigo\": \"ME004\",\n      \"cantidad\": 1\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Pedido creado\", () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set(\"pedidoId\", pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listar pedidos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/pedidos"
+      }
+    },
+    {
+      "name": "Consultar pedido",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/pedidos/{{pedidoId}}"
+      }
+    },
+    {
+      "name": "Cancelar pedido",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/pedidos/{{pedidoId}}/estado",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"CANCELADO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Marcar enviado",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/pedidos/{{pedidoId}}/estado",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"ENVIADO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Marcar entregado",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/pedidos/{{pedidoId}}/estado",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"ENTREGADO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Reintentar confirmación",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/pedidos/{{pedidoId}}/confirmar"
+      }
+    }
+  ]
+}
