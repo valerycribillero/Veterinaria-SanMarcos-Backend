@@ -8,5 +8,6 @@
     <modules>
         <module>productos-service</module>
         <module>pedidos-service</module>
+        <module>agenda-service</module>
     </modules>
 </project>

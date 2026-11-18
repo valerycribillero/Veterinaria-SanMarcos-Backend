@@ -1,0 +1,121 @@
+{
+  "info": {
+    "name": "Agenda",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8088"
+    },
+    {
+      "key": "horarioId",
+      "value": "1"
+    },
+    {
+      "key": "citaId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Crear horario",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/horarios",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fecha\": \"{{fecha}}\",\n  \"hora\": \"09:00\",\n  \"veterinario\": \"Dra. Veterinaria\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const fecha = new Date();",
+              "fecha.setDate(fecha.getDate() + 2);",
+              "pm.collectionVariables.set('fecha', fecha.toISOString().slice(0, 10));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) { pm.collectionVariables.set('horarioId', pm.response.json().id); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listar horarios",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/horarios"
+      }
+    },
+    {
+      "name": "Reservar cita",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/citas",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"horarioId\": {{horarioId}},\n  \"dueno\": \"Cliente de prueba\",\n  \"correo\": \"cliente@example.com\",\n  \"mascota\": \"Luna\",\n  \"especie\": \"Perro\",\n  \"servicio\": \"Vacunación\",\n  \"motivo\": \"Control anual\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) { pm.collectionVariables.set('citaId', pm.response.json().id); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listar citas",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/citas"
+      }
+    },
+    {
+      "name": "Consultar cita",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/citas/{{citaId}}"
+      }
+    },
+    {
+      "name": "Marcar atendida",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/api/citas/{{citaId}}/atendida"
+      }
+    },
+    {
+      "name": "Cancelar cita reservada",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/citas/{{citaId}}"
+      }
+    }
+  ]
+}

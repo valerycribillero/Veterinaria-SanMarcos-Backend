@@ -7,6 +7,7 @@
 | Mensajería | `MensajeriaServiceApplication` | `mensajeria` | 8082 |
 | Productos e inventario | `ProductosApplication` | `productos` | 8086 |
 | Compras y pedidos | `PedidosApplication` | `pedidos` | 8087 |
+| Agenda y citas | `AgendaApplication` | `agenda` | 8088 |
 
 Para iniciar los dos servicios nuevos, activa MySQL en Laragon y crea las bases.
 
