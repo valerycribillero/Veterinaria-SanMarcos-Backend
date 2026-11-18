@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service 
 public class UsuarioService {
-     private final UsuarioRepository repository; //para poder acceder a la base de datos
+    private final UsuarioRepository repository; //para poder acceder a la base de datos
 
     private final PasswordEncoder passwordEncoder;
 
