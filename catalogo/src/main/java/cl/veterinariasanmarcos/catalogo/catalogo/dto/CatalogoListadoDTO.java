@@ -1,5 +1,8 @@
 package cl.veterinariasanmarcos.catalogo.catalogo.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 public class CatalogoListadoDTO {
