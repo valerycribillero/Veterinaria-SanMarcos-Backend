@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.net.http.HttpClient;
+import java.time.Duration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
+import org.springframework.web.client.RestClient;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,7 +17,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.server.ResponseStatusException;
-import cl.veterinariasanmarcos.pedidos.client.ProductosClient;
 import cl.veterinariasanmarcos.pedidos.dto.*;
 import cl.veterinariasanmarcos.pedidos.model.Pedido;
 import cl.veterinariasanmarcos.pedidos.model.Pedido.Estado;
@@ -20,11 +25,20 @@ import cl.veterinariasanmarcos.pedidos.repository.PedidoRepository;
 @Service
 public class PedidoService {
     private final PedidoRepository pedidos;
-    private final ProductosClient productos;
+    private final RestClient conexionProductos;
     private final TransactionTemplate transaccion;
-    public PedidoService(PedidoRepository pedidos, ProductosClient productos, TransactionTemplate transaccion) {
+    public PedidoService(PedidoRepository pedidos, TransactionTemplate transaccion,
+            @Value("${productos.url}") String urlProductos) {
         this.pedidos = pedidos;
-        this.productos = productos;
+        HttpClient http = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(3))
+                .build();
+        var peticiones = new JdkClientHttpRequestFactory(http);
+        peticiones.setReadTimeout(Duration.ofSeconds(5));
+        this.conexionProductos = RestClient.builder()
+                .baseUrl(urlProductos)
+                .requestFactory(peticiones)
+                .build();
         this.transaccion = transaccion;
     }
 
@@ -69,7 +83,7 @@ public class PedidoService {
                     throw new ResponseStatusException(HttpStatus.CONFLICT, "El pedido está cancelado o cancelándose");
                 }
                 if (pedido.getEstado() == Estado.PENDIENTE) {
-                    var reserva = productos.reservar(pedido.getReferencia(), pedido.solicitud().productos());
+                    var reserva = reservarProductos(pedido);
                     pedido.confirmar(reserva);
                 }
                 return PedidoVista.de(pedido);
@@ -133,7 +147,7 @@ public class PedidoService {
             return transaccion.execute(estado -> {
                 Pedido pedido = buscarBloqueado(id);
                 if (pedido.getEstado() != Estado.CANCELADO) {
-                    productos.liberar(pedido.getReferencia());
+                    devolverProductos(pedido.getReferencia());
                     pedido.cambiarEstado(Estado.CANCELADO);
                 }
                 return PedidoVista.de(pedido);
@@ -142,6 +156,23 @@ public class PedidoService {
             throw new PedidoPendienteException(id, HttpStatus.SERVICE_UNAVAILABLE,
                     "La cancelación del pedido " + id + " quedó pendiente. Repite la cancelación para completarla.");
         }
+    }
+
+    // Solicita el descuento de stock al servicio de Productos.
+    private ReservaProducto reservarProductos(Pedido pedido) {
+        return conexionProductos.put()
+                .uri("/api/reservas-stock/{id}", pedido.getReferencia())
+                .body(Map.of("productos", pedido.solicitud().productos()))
+                .retrieve()
+                .body(ReservaProducto.class);
+    }
+
+    // Solicita devolver las unidades de un pedido cancelado.
+    private void devolverProductos(String referencia) {
+        conexionProductos.delete()
+                .uri("/api/reservas-stock/{id}", referencia)
+                .retrieve()
+                .toBodilessEntity();
     }
 
     private Pedido buscarBloqueado(Long id) {

@@ -16,7 +16,7 @@ CREATE DATABASE productos;
 CREATE DATABASE pedidos;
 ```
 
-Ejecuta primero `ProductosApplication` y después `PedidosApplication`. Los dos tienen su propio `pom.xml` y sus carpetas `controller`, `service`, `repository`, `model` y `dto`. Pedidos también tiene `client`, donde está la conexión HTTP con Productos.
+Ejecuta primero `ProductosApplication` y después `PedidosApplication`. Los dos tienen su propio `pom.xml` y sus carpetas `controller`, `service`, `repository`, `model` y `dto`. La comunicación HTTP con Productos está dentro de `PedidoService`.
 
 El listado y el detalle consultan la misma información de Productos. Las compras y su historial se guardan en Pedidos. Cada servicio es dueño de sus tablas y Flyway aplica sus propias migraciones.
 
