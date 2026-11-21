@@ -11,7 +11,7 @@ import cl.veterinariasanmarcos.usuarios.model.Usuario;
 import cl.veterinariasanmarcos.usuarios.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Service 
+@Service
 public class UsuarioService {
     private final UsuarioRepository repository; //para poder acceder a la base de datos
 
@@ -24,7 +24,7 @@ public class UsuarioService {
     }
 
     public Usuario guardarUsuario(Usuario usuario){
-        String passwordEncriptada = 
+        String passwordEncriptada =
                 passwordEncoder.encode(usuario.getPassword());
         usuario.setPassword(passwordEncriptada);
         return repository.save(usuario);
@@ -39,8 +39,15 @@ public class UsuarioService {
     }
 
     public Usuario actualizarUsuario(Integer id, Usuario usuario){
-        usuario.setId(id);
-        return repository.save(usuario);
+        Usuario existente = repository.findById(id).orElse(null);
+        if (existente == null) return null;
+        existente.setNombre(usuario.getNombre());
+        existente.setEmail(usuario.getEmail());
+        existente.setRol(usuario.getRol());
+        if (usuario.getPassword() != null && !usuario.getPassword().isBlank()) {
+            existente.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        }
+        return repository.save(existente);
     }
 
     public List<Usuario> listar(){
@@ -54,8 +61,10 @@ public class UsuarioService {
 
         for (Usuario u : usuarios){
             UsuarioListadoDTO dto = new UsuarioListadoDTO();
+            dto.setId(u.getId());
             dto.setNombre((u.getNombre()));
             dto.setEmail(u.getEmail());
+            dto.setRol(u.getRol());
 
             lista.add(dto);
         }
