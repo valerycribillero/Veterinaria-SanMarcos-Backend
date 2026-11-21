@@ -9,5 +9,9 @@ import java.util.List;
 @Repository
 public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     List<Consulta> findByPacienteIdOrderByFechaConsultaDesc(Long pacienteId);
-    List<Consulta> findByFechaConsultaBetweenOrderByFechaConsultaDesc(LocalDateTime inicio, LocalDateTime fin);
+
+    List<Consulta> findByFechaConsultaBetweenOrderByFechaConsultaDesc(
+        LocalDateTime inicio,
+        LocalDateTime fin
+    );
 }

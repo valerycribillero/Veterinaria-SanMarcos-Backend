@@ -17,11 +17,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity 
-@Data 
+@Entity
+@Data
 @Table(name = "registro")
-@AllArgsConstructor 
-@NoArgsConstructor 
+@AllArgsConstructor
+@NoArgsConstructor
 public class Usuario {
 
     @Id
@@ -29,7 +29,10 @@ public class Usuario {
     private Integer id;
 
     @NotBlank(message = "Debe ingresar un nombre")
-    @Column(nullable = false, length = 50)
+    @Column(
+        nullable = false,
+        length = 50
+    )
     private String nombre;
 
     @Email(message = "Debe ser un correo válido")
@@ -44,8 +47,9 @@ public class Usuario {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
-    private Rol rol; 
-
-
+    @Column(
+        nullable = false,
+        length = 10
+    )
+    private Rol rol;
 }

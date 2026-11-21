@@ -11,8 +11,14 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "horario", uniqueConstraints = @UniqueConstraint(
-        name = "uq_horario_veterinario", columnNames = {"fecha", "hora", "veterinario"}))
+@Table(
+    name = "horario",
+    uniqueConstraints =
+                @UniqueConstraint(
+                    name = "uq_horario_veterinario",
+                    columnNames = {"fecha", "hora", "veterinario"}
+                )
+)
 public class Horario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +30,10 @@ public class Horario {
     @Column(nullable = false)
     private LocalTime hora;
 
-    @Column(nullable = false, length = 150)
+    @Column(
+        nullable = false,
+        length = 150
+    )
     private String veterinario;
 
     @Column(nullable = false)
@@ -36,7 +45,11 @@ public class Horario {
     protected Horario() {
     }
 
-    public Horario(LocalDate fecha, LocalTime hora, String veterinario) {
+    public Horario(
+        LocalDate fecha,
+        LocalTime hora,
+        String veterinario
+    ) {
         this.fecha = fecha;
         this.hora = hora;
         this.veterinario = veterinario;

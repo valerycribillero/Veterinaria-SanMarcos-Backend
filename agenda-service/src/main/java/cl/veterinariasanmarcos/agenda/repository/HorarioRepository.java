@@ -12,17 +12,25 @@ import org.springframework.data.repository.query.Param;
 import cl.veterinariasanmarcos.agenda.model.Horario;
 
 public interface HorarioRepository extends JpaRepository<Horario, Long> {
-    boolean existsByFechaAndHoraAndVeterinario(LocalDate fecha, LocalTime hora, String veterinario);
+    boolean existsByFechaAndHoraAndVeterinario(
+        LocalDate fecha,
+        LocalTime hora,
+        String veterinario
+    );
 
-    @Query("""
+    @Query(
+            """
             select h from Horario h
             where h.activo = true and h.reservado = false
             and (h.fecha > :hoy or (h.fecha = :hoy and h.hora > :ahora))
             and (:fecha is null or h.fecha = :fecha)
             order by h.fecha, h.hora, h.veterinario
             """)
-    List<Horario> listarDisponibles(@Param("hoy") LocalDate hoy, @Param("ahora") LocalTime ahora,
-            @Param("fecha") LocalDate fecha);
+    List<Horario> listarDisponibles(
+        @Param("hoy") LocalDate hoy,
+        @Param("ahora") LocalTime ahora,
+        @Param("fecha") LocalDate fecha
+    );
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select h from Horario h where h.id = :id")

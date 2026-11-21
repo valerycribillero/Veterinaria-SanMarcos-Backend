@@ -15,22 +15,36 @@ import cl.veterinariasanmarcos.pedidos.service.PedidoService;
 @RequestMapping("/api/pedidos")
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 public class PedidoController {
-    public record CambioEstado(@NotNull Pedido.Estado estado) {}
+    public record CambioEstado(
+            @NotNull
+            Pedido.Estado estado
+    ) {
+    }
+
     private final PedidoService service;
+
     public PedidoController(PedidoService service) {
         this.service = service;
     }
 
     @PostMapping
-
     @ResponseStatus(HttpStatus.CREATED)
-    public PedidoVista crear(@Valid @RequestBody NuevoPedido datos,
-            @RequestHeader(value = "Idempotency-Key", required = false)
-            @Pattern(regexp = "[A-Za-z0-9-]{1,64}") String referencia) {
+    public PedidoVista crear(
+        @Valid @RequestBody NuevoPedido datos,
+        @RequestHeader(
+            value = "Idempotency-Key",
+            required = false
+        )
+                    @Pattern(regexp = "[A-Za-z0-9-]{1,64}")
+                    String referencia
+    ) {
         if (referencia == null) {
             referencia = UUID.randomUUID().toString();
         }
-        return service.crear(referencia, datos);
+        return service.crear(
+            referencia,
+            datos
+        );
     }
 
     @PostMapping("/{id}/confirmar")
@@ -49,7 +63,13 @@ public class PedidoController {
     }
 
     @PatchMapping("/{id}/estado")
-    public PedidoVista cambiarEstado(@PathVariable Long id, @Valid @RequestBody CambioEstado datos) {
-        return service.cambiarEstado(id, datos.estado());
+    public PedidoVista cambiarEstado(
+        @PathVariable Long id,
+        @Valid @RequestBody CambioEstado datos
+    ) {
+        return service.cambiarEstado(
+            id,
+            datos.estado()
+        );
     }
 }

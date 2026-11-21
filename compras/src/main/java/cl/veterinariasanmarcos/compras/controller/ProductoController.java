@@ -35,7 +35,8 @@ public class ProductoController {
     }
 
     @GetMapping("/bajo-stock")
-    public ResponseEntity<List<ProductoDTO>> listarBajoStock(@RequestParam(defaultValue = "20") int umbral) {
+    public ResponseEntity<List<ProductoDTO>> listarBajoStock(
+            @RequestParam(defaultValue = "20") int umbral) {
         return ResponseEntity.ok(productoService.listarBajoStock(umbral));
     }
 
@@ -46,19 +47,27 @@ public class ProductoController {
 
     @PostMapping
     public ResponseEntity<ProductoDTO> crearOActualizar(@Valid @RequestBody ProductoDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productoService.guardarOActualizar(dto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(productoService.guardarOActualizar(dto));
     }
 
     @PatchMapping("/{codigo}/stock")
     public ResponseEntity<ProductoDTO> actualizarStock(
-            @PathVariable String codigo,
-            @RequestParam int stock) {
-        return ResponseEntity.ok(productoService.actualizarStock(codigo, stock));
+        @PathVariable String codigo,
+        @RequestParam int stock
+    ) {
+        return ResponseEntity.ok(productoService.actualizarStock(
+            codigo,
+            stock
+        ));
     }
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity desactivar(@PathVariable String codigo) {
         productoService.desactivar(codigo);
-        return ResponseEntity.ok(Map.of("mensaje", "Producto desactivado correctamente"));
+        return ResponseEntity.ok(Map.of(
+            "mensaje",
+            "Producto desactivado correctamente"
+        ));
     }
 }

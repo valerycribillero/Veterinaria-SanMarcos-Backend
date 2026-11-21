@@ -11,7 +11,8 @@ import org.springframework.data.repository.query.Param;
 import cl.veterinariasanmarcos.agenda.model.Cita;
 
 public interface CitaRepository extends JpaRepository<Cita, Long> {
-    @Query("""
+    @Query(
+            """
             select c from Cita c
             where (:fecha is null or c.fecha = :fecha)
             order by c.fecha, c.hora, c.id

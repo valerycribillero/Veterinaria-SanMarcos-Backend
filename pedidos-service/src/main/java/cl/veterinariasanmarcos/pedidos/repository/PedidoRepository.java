@@ -9,10 +9,10 @@ import cl.veterinariasanmarcos.pedidos.model.Pedido;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findAllByOrderByFechaDescIdDesc();
+
     Optional<Pedido> findByReferencia(String referencia);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-
     @Query("select p from Pedido p where p.id = :id")
     Optional<Pedido> bloquear(@Param("id") Long id);
 }

@@ -7,13 +7,27 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record DatosCita(
-        @NotNull @Positive Long horarioId,
-        @NotBlank @Size(max = 150) String dueno,
-        @NotBlank @Email @Size(max = 150) String correo,
-        @NotBlank @Size(max = 100) String mascota,
-        @NotBlank @Size(max = 50) String especie,
-        @Size(max = 150) String servicio,
-        @NotBlank @Size(max = 2000) String motivo
+    @NotNull
+        @Positive
+        Long horarioId,
+    @NotBlank
+        @Size(max = 150)
+        String dueno,
+    @NotBlank
+        @Email
+        @Size(max = 150)
+        String correo,
+    @NotBlank
+        @Size(max = 100)
+        String mascota,
+    @NotBlank
+        @Size(max = 50)
+        String especie,
+    @Size(max = 150)
+        String servicio,
+    @NotBlank
+        @Size(max = 2000)
+        String motivo
 ) {
     public DatosCita {
         dueno = limpiar(dueno);

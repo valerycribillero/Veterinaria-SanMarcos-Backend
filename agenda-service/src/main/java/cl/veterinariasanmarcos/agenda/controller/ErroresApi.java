@@ -18,7 +18,10 @@ public class ErroresApi {
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<?> negocio(ResponseStatusException error) {
         return ResponseEntity.status(error.getStatusCode())
-                .body(Map.of("mensaje", error.getReason()));
+                .body(Map.of(
+                    "mensaje",
+                    error.getReason()
+                ));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -28,18 +31,33 @@ public class ErroresApi {
             errores.add(campo.getField() + ": " + campo.getDefaultMessage());
         }
         return ResponseEntity.badRequest()
-                .body(Map.of("mensaje", "Revisa los datos enviados", "errores", errores));
+                .body(Map.of(
+                    "mensaje",
+                    "Revisa los datos enviados",
+                    "errores",
+                    errores
+                ));
     }
 
-    @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
+    @ExceptionHandler({
+        HttpMessageNotReadableException.class,
+        MethodArgumentTypeMismatchException.class
+    })
     public ResponseEntity<?> formato() {
         return ResponseEntity.badRequest()
-                .body(Map.of("mensaje", "Revisa el formato de los datos. Fecha AAAA-MM-DD y hora HH:mm."));
+                .body(
+                        Map.of(
+                            "mensaje",
+                            "Revisa el formato de los datos. Fecha AAAA-MM-DD y hora HH:mm."
+                        ));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> conflicto() {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Map.of("mensaje", "El horario ya fue registrado o reservado"));
+                .body(Map.of(
+                    "mensaje",
+                    "El horario ya fue registrado o reservado"
+                ));
     }
 }

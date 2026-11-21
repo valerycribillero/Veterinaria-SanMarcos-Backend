@@ -44,15 +44,23 @@ public class CompraController {
 
     @PatchMapping("/{id}/estado")
     public ResponseEntity<CompraResponseDTO> cambiarEstado(
-            @PathVariable Long id,
-            @RequestParam EstadoCompra estado) {
-        return ResponseEntity.ok(compraService.cambiarEstado(id, estado));
+        @PathVariable Long id,
+        @RequestParam EstadoCompra estado
+    ) {
+        return ResponseEntity.ok(compraService.cambiarEstado(
+            id,
+            estado
+        ));
     }
 
     @GetMapping("/reportes/ventas")
     public ResponseEntity<List<CompraResponseDTO>> reporteVentas(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin) {
-        return ResponseEntity.ok(compraService.reporteVentasPorPeriodo(inicio, fin));
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin
+    ) {
+        return ResponseEntity.ok(compraService.reporteVentasPorPeriodo(
+            inicio,
+            fin
+        ));
     }
 }

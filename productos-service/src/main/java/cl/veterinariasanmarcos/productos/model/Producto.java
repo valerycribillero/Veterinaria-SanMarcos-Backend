@@ -11,33 +11,59 @@ public class Producto {
     @Column(length = 30)
     private String codigo;
 
-    @Column(nullable = false, length = 150)
+    @Column(
+        nullable = false,
+        length = 150
+    )
     private String nombre;
 
-    @Column(nullable = false, length = 100)
+    @Column(
+        nullable = false,
+        length = 100
+    )
     private String categoria;
 
-    @Column(nullable = false, precision = 10, scale = 0)
+    @Column(
+        nullable = false,
+        precision = 10,
+        scale = 0
+    )
     private BigDecimal precio;
 
     @Column(nullable = false)
     private int stock;
 
-    @Column(nullable = false, length = 500)
+    @Column(
+        nullable = false,
+        length = 500
+    )
     private String imagen;
 
-    @Column(name = "principio_activo", nullable = false, length = 150)
+    @Column(
+        name = "principio_activo",
+        nullable = false,
+        length = 150
+    )
     private String principioActivo;
 
-    @Column(nullable = false, length = 100)
+    @Column(
+        nullable = false,
+        length = 100
+    )
     private String presentacion;
 
-    @Column(nullable = false, length = 100)
+    @Column(
+        nullable = false,
+        length = 100
+    )
     private String especie;
 
     @Column(nullable = false)
     private boolean activo = true;
-    protected Producto() {}
+
+    protected Producto() {
+    }
+
     public Producto(String codigo) {
         this.codigo = codigo;
     }
@@ -117,5 +143,4 @@ public class Producto {
     public boolean isActivo() {
         return activo;
     }
-
 }

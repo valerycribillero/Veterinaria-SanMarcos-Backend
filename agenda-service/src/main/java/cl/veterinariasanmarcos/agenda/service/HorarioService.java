@@ -24,29 +24,57 @@ public class HorarioService {
 
     public Horario crear(NuevoHorario datos) {
         if (datos.hora().getSecond() != 0 || datos.hora().getNano() != 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La hora debe indicar horas y minutos");
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "La hora debe indicar horas y minutos"
+            );
         }
         validarFecha(datos.fecha().atTime(datos.hora()));
-        if (repository.existsByFechaAndHoraAndVeterinario(datos.fecha(), datos.hora(), datos.veterinario())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ese veterinario ya tiene un horario registrado");
+        if (repository.existsByFechaAndHoraAndVeterinario(
+            datos.fecha(),
+            datos.hora(),
+            datos.veterinario()
+        )) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Ese veterinario ya tiene un horario registrado"
+            );
         }
-        return repository.saveAndFlush(new Horario(datos.fecha(), datos.hora(), datos.veterinario()));
+        return repository.saveAndFlush(
+                new Horario(
+                    datos.fecha(),
+                    datos.hora(),
+                    datos.veterinario()
+                ));
     }
 
     @Transactional(readOnly = true)
     public List<Horario> listarDisponibles(LocalDate fecha) {
         LocalDateTime ahora = LocalDateTime.now(ZONA);
-        return repository.listarDisponibles(ahora.toLocalDate(), ahora.toLocalTime(), fecha);
+        return repository.listarDisponibles(
+            ahora.toLocalDate(),
+            ahora.toLocalTime(),
+            fecha
+        );
     }
 
     public Horario buscarBloqueado(Long id) {
-        return repository.bloquear(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Horario no encontrado"));
+        return repository
+                .bloquear(id)
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                    HttpStatus.NOT_FOUND,
+                                    "Horario no encontrado"
+                                ));
     }
 
     public void validarVigente(Horario horario) {
         if (!horario.isActivo()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "El horario está desactivado");
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "El horario está desactivado"
+            );
         }
         validarFecha(horario.getFecha().atTime(horario.getHora()));
     }
@@ -54,14 +82,20 @@ public class HorarioService {
     public void validarDisponible(Horario horario) {
         validarVigente(horario);
         if (horario.isReservado()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "El horario ya está reservado");
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "El horario ya está reservado"
+            );
         }
     }
 
     public void desactivar(Long id) {
         Horario horario = buscarBloqueado(id);
         if (horario.isReservado()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "El horario tiene una cita; cancela la cita primero");
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "El horario tiene una cita; cancela la cita primero"
+            );
         }
         horario.desactivar();
     }
@@ -75,7 +109,10 @@ public class HorarioService {
 
     private void validarFecha(LocalDateTime fecha) {
         if (!fecha.isAfter(LocalDateTime.now(ZONA))) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El horario debe ser futuro");
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "El horario debe ser futuro"
+            );
         }
     }
 }

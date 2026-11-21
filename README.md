@@ -22,7 +22,7 @@ El listado y el detalle consultan la misma información de Productos. Las compra
 
 En React, las consultas de productos conservan el puerto 8086. Las peticiones a `/api/pedidos` pasan al puerto 8087. La integración del frontend con estas dos APIs corresponde al siguiente paso.
 
-Si una compra o cancelación queda pendiente por una interrupción, conserva el `pedidoId` y reintenta esa operación. El README de Pedidos describe las rutas de recuperación. Incluimos pruebas de compra, stock, precios, cancelación, concurrencia y fallos de conexión.
+Si una compra o cancelación queda pendiente por una interrupción, conserva el `pedidoId` y reintenta esa operación. El README de Pedidos describe las rutas de recuperación. Las pruebas actuales usan MockMvc y servicios simulados para comprobar los controladores y las validaciones de entrada.
 
 ## Conservar datos anteriores de tienda
 
@@ -82,4 +82,6 @@ Las migraciones `V1` y `V2` siguen el orden del ejemplo de clase. La primera cre
 - `dto`: define y valida los datos de entrada.
 - `src/main/resources/db/migracion`: contiene el SQL versionado que ejecuta Flyway.
 
-Para comprobar el arranque con una base de pruebas en memoria, abre `MensajeriaServiceApplicationTests.java` y pulsa **Run Test** sobre `contextLoads`. La API es para desarrollo local y sus operaciones administrativas aún requieren autenticación antes de exponerlas a otras personas.
+Las pruebas de controladores están en la carpeta `src/test/java` de cada servicio, dentro de `controller`. Abre `ContactoControllerTest.java`, `ProductoControllerTest.java`, `ReservaControllerTest.java`, `PedidoControllerTest.java`, `CitaControllerTest.java` o `HorarioControllerTest.java` y pulsa **Run Test**. Usan `when`, `mockMvc.perform` y `andExpect`; no requieren MySQL ni otros servicios iniciados. `@MockitoBean` es la anotación usada para simular el servicio en Spring Boot 4. Estas pruebas no comprueban la persistencia ni la comunicación real entre microservicios.
+
+Para comprobar el arranque de Mensajería con una base de pruebas en memoria, abre `MensajeriaServiceApplicationTests.java` y pulsa **Run Test** sobre `laAplicacionIniciaCorrectamente`. La API es para desarrollo local y sus operaciones administrativas aún requieren autenticación antes de exponerlas a otras personas.

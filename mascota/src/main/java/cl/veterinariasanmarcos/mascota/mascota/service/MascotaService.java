@@ -10,11 +10,10 @@ import cl.veterinariasanmarcos.mascota.mascota.dto.ListarMascotasDTO;
 import cl.veterinariasanmarcos.mascota.mascota.model.Mascota;
 import cl.veterinariasanmarcos.mascota.mascota.repository.MascotaRepository;
 
-@Service 
+@Service
 public class MascotaService {
 
-    @Autowired
-    private MascotaRepository mascotaRepository;
+    @Autowired private MascotaRepository mascotaRepository;
 
     public List<Mascota> obtenerMascotas() {
         return mascotaRepository.findAll();
@@ -32,7 +31,10 @@ public class MascotaService {
         mascotaRepository.deleteById(id);
     }
 
-    public Mascota actualizarMascota(Integer id, Mascota mascota) {
+    public Mascota actualizarMascota(
+        Integer id,
+        Mascota mascota
+    ) {
         mascota.setId(id);
         return mascotaRepository.save(mascota);
     }
@@ -52,7 +54,6 @@ public class MascotaService {
             dto.setSexo(m.getSexo());
             dto.setCreadoEn(m.getCreadoEn());
             dto.setClienteId(m.getClienteId());
-            
 
             lista.add(dto);
         }

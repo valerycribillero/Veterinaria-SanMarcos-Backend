@@ -9,10 +9,10 @@ import cl.veterinariasanmarcos.productos.model.Producto;
 
 public interface ProductoRepository extends JpaRepository<Producto, String> {
     List<Producto> findByActivoTrueOrderByCodigoAsc();
+
     Optional<Producto> findByCodigoAndActivoTrue(String codigo);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-
     @Query("select p from Producto p where p.codigo = :codigo")
     Optional<Producto> bloquear(@Param("codigo") String codigo);
 }

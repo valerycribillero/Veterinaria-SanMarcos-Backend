@@ -21,12 +21,15 @@ public class ConsultaController {
     private final ConsultaService consultaService;
 
     @PostMapping
-    public ResponseEntity<ConsultaResponseDTO> registrarConsulta(@Valid @RequestBody ConsultaRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(consultaService.registrarConsulta(dto));
+    public ResponseEntity<ConsultaResponseDTO> registrarConsulta(
+            @Valid @RequestBody ConsultaRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(consultaService.registrarConsulta(dto));
     }
 
     @GetMapping("/paciente/{pacienteId}")
-    public ResponseEntity<List<ConsultaResponseDTO>> historialPorPaciente(@PathVariable Long pacienteId) {
+    public ResponseEntity<List<ConsultaResponseDTO>> historialPorPaciente(
+            @PathVariable Long pacienteId) {
         return ResponseEntity.ok(consultaService.listarPorPaciente(pacienteId));
     }
 
@@ -36,15 +39,20 @@ public class ConsultaController {
     }
 
     @GetMapping("/vacunas/por-vencer")
-    public ResponseEntity<List<VacunaRegistroDTO>> vacunasPorVencer(@RequestParam(defaultValue = "15") int dias) {
+    public ResponseEntity<List<VacunaRegistroDTO>> vacunasPorVencer(
+            @RequestParam(defaultValue = "15") int dias) {
         return ResponseEntity.ok(consultaService.obtenerVacunasPorVencer(dias));
     }
 
     // Reporte de atenciones por período
     @GetMapping("/reportes/atenciones")
     public ResponseEntity<List<ConsultaResponseDTO>> reporteAtenciones(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin) {
-        return ResponseEntity.ok(consultaService.reporteAtencionesPorPeriodo(inicio, fin));
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin
+    ) {
+        return ResponseEntity.ok(consultaService.reporteAtencionesPorPeriodo(
+            inicio,
+            fin
+        ));
     }
 }

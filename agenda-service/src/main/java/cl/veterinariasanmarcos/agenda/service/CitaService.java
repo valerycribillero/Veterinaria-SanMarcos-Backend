@@ -19,7 +19,10 @@ public class CitaService {
     private final CitaRepository repository;
     private final HorarioService horarios;
 
-    public CitaService(CitaRepository repository, HorarioService horarios) {
+    public CitaService(
+        CitaRepository repository,
+        HorarioService horarios
+    ) {
         this.repository = repository;
         this.horarios = horarios;
     }
@@ -29,7 +32,11 @@ public class CitaService {
         Horario horario = horarios.buscarBloqueado(datos.horarioId());
         horarios.validarDisponible(horario);
         horario.reservar();
-        Cita cita = new Cita(datos, horario, LocalDateTime.now(ZoneId.of("America/Santiago")));
+        Cita cita = new Cita(
+            datos,
+            horario,
+            LocalDateTime.now(ZoneId.of("America/Santiago"))
+        );
         return repository.saveAndFlush(cita);
     }
 
@@ -40,17 +47,32 @@ public class CitaService {
 
     @Transactional(readOnly = true)
     public Cita buscar(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cita no encontrada"));
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                    HttpStatus.NOT_FOUND,
+                                    "Cita no encontrada"
+                                ));
     }
 
-    public Cita actualizar(Long id, DatosCita datos) {
+    public Cita actualizar(
+        Long id,
+        DatosCita datos
+    ) {
         Cita cita = buscarBloqueada(id);
         validarReservada(cita);
 
         // Se bloquean por ID en orden para evitar bloqueos cruzados al reprogramar.
-        Long primero = Math.min(cita.getHorarioId(), datos.horarioId());
-        Long segundo = Math.max(cita.getHorarioId(), datos.horarioId());
+        Long primero = Math.min(
+            cita.getHorarioId(),
+            datos.horarioId()
+        );
+        Long segundo = Math.max(
+            cita.getHorarioId(),
+            datos.horarioId()
+        );
         Horario horarioPrimero = horarios.buscarBloqueado(primero);
         Horario horarioSegundo = horarioPrimero;
         if (!primero.equals(segundo)) {
@@ -70,7 +92,10 @@ public class CitaService {
             anterior.liberar();
             nuevo.reservar();
         }
-        cita.actualizar(datos, nuevo);
+        cita.actualizar(
+            datos,
+            nuevo
+        );
         return cita;
     }
 
@@ -96,13 +121,22 @@ public class CitaService {
     }
 
     private Cita buscarBloqueada(Long id) {
-        return repository.bloquear(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cita no encontrada"));
+        return repository
+                .bloquear(id)
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                    HttpStatus.NOT_FOUND,
+                                    "Cita no encontrada"
+                                ));
     }
 
     private void validarReservada(Cita cita) {
         if (cita.getEstado() != Cita.Estado.RESERVADA) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "La cita debe estar reservada para realizar esta operación");
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "La cita debe estar reservada para realizar esta operación"
+            );
         }
     }
 }

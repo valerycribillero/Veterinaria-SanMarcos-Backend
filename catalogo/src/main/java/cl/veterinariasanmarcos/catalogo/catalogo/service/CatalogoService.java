@@ -1,4 +1,3 @@
-
 package cl.veterinariasanmarcos.catalogo.catalogo.service;
 
 import java.util.List;
@@ -35,7 +34,10 @@ public class CatalogoService {
         repository.deleteById(id);
     }
 
-    public Catalogo actualizarProducto(Integer id, Catalogo datos) {
+    public Catalogo actualizarProducto(
+        Integer id,
+        Catalogo datos
+    ) {
 
         Catalogo catalogo = repository.findById(id).orElse(null);
 

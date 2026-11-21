@@ -7,9 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import cl.veterinariasanmarcos.usuarios.model.Usuario;
 
-@Repository 
+@Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-     Optional<Usuario> findById(Integer id);
-
+    Optional<Usuario> findById(Integer id);
 }

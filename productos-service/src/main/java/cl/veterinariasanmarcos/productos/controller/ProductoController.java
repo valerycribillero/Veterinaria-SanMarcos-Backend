@@ -14,11 +14,18 @@ import cl.veterinariasanmarcos.productos.service.ProductoService;
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 public class ProductoController {
     private final ProductoService service;
+
     public ProductoController(ProductoService service) {
         this.service = service;
     }
 
-    public record Stock(@NotNull @Min(0) @Max(1000000) Integer stock) {}
+    public record Stock(
+            @NotNull
+            @Min(0)
+            @Max(1000000)
+            Integer stock
+    ) {
+    }
 
     @GetMapping
     public List<Producto> listar() {
@@ -37,13 +44,25 @@ public class ProductoController {
     }
 
     @PutMapping("/{codigo}")
-    public Producto actualizar(@PathVariable String codigo, @Valid @RequestBody DatosProducto datos) {
-        return service.actualizar(codigo, datos);
+    public Producto actualizar(
+        @PathVariable String codigo,
+        @Valid @RequestBody DatosProducto datos
+    ) {
+        return service.actualizar(
+            codigo,
+            datos
+        );
     }
 
     @PatchMapping("/{codigo}/stock")
-    public Producto stock(@PathVariable String codigo, @Valid @RequestBody Stock datos) {
-        return service.actualizarStock(codigo, datos.stock());
+    public Producto stock(
+        @PathVariable String codigo,
+        @Valid @RequestBody Stock datos
+    ) {
+        return service.actualizarStock(
+            codigo,
+            datos.stock()
+        );
     }
 
     @DeleteMapping("/{codigo}")
@@ -51,5 +70,4 @@ public class ProductoController {
     public void eliminar(@PathVariable String codigo) {
         service.eliminar(codigo);
     }
-
 }

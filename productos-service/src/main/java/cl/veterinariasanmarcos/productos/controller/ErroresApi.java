@@ -14,23 +14,47 @@ public class ErroresApi {
 
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<?> negocio(ResponseStatusException error) {
-        return ResponseEntity.status(error.getStatusCode()).body(Map.of("mensaje", error.getReason() == null ? "Solicitud rechazada" : error.getReason()));
+        return ResponseEntity.status(error.getStatusCode())
+                .body(
+                        Map.of(
+                            "mensaje",
+                            error.getReason() == null
+                                        ? "Solicitud rechazada"
+                                        : error.getReason()
+                        ));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<?> validacion(MethodArgumentNotValidException error) {
-        List<String> detalles = error.getBindingResult().getFieldErrors().stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage()).toList();
-        return ResponseEntity.badRequest().body(Map.of("mensaje", "Revisa los datos enviados", "errores", detalles));
+        List<String> detalles =
+                error.getBindingResult().getFieldErrors().stream()
+                        .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                        .toList();
+        return ResponseEntity.badRequest()
+                .body(Map.of(
+                    "mensaje",
+                    "Revisa los datos enviados",
+                    "errores",
+                    detalles
+                ));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ResponseEntity<?> jsonInvalido() {
-        return ResponseEntity.badRequest().body(Map.of("mensaje", "JSON inválido: revisa campos, tipos de datos y valores permitidos"));
+        return ResponseEntity.badRequest()
+                .body(
+                        Map.of(
+                            "mensaje",
+                            "JSON inválido: revisa campos, tipos de datos y valores permitidos"
+                        ));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<?> conflicto() {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("mensaje", "Los datos entran en conflicto con un registro existente"));
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                    "mensaje",
+                    "Los datos entran en conflicto con un registro existente"
+                ));
     }
 }

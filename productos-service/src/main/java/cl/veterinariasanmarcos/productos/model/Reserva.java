@@ -7,28 +7,34 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "reserva_stock")
 public class Reserva {
-    public enum Estado { NUEVA, RESERVADA, LIBERADA }
+    public enum Estado {
+        NUEVA,
+        RESERVADA,
+        LIBERADA
+    }
 
     @Id
-
     @Column(length = 64)
     private String id;
 
     @Enumerated(EnumType.STRING)
-
-    @Column(nullable = false, length = 20)
+    @Column(
+        nullable = false,
+        length = 20
+    )
     private Estado estado = Estado.NUEVA;
 
     @Column(length = 5000)
     private String firma;
 
     @ElementCollection
-
-    @CollectionTable(name = "reserva_detalle", joinColumns =
-    @JoinColumn(name = "reserva_id"))
-
+    @CollectionTable(
+        name = "reserva_detalle",
+        joinColumns = @JoinColumn(name = "reserva_id")
+    )
     @OrderColumn(name = "posicion")
     private List<DetalleReserva> productos = new ArrayList<>();
+
     protected Reserva() {
     }
 
@@ -61,5 +67,4 @@ public class Reserva {
     public void liberar() {
         this.estado = Estado.LIBERADA;
     }
-
 }

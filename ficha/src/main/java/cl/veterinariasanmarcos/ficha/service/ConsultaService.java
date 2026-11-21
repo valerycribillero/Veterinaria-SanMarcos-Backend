@@ -24,32 +24,42 @@ public class ConsultaService {
 
     @Transactional
     public ConsultaResponseDTO registrarConsulta(ConsultaRequestDTO dto) {
-        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
-                .orElseThrow(() -> new EntityNotFoundException("Paciente no encontrado con ID: " + dto.getPacienteId()));
+        Paciente paciente =
+                pacienteRepository
+                        .findById(dto.getPacienteId())
+                        .orElseThrow(
+                                () ->
+                                        new EntityNotFoundException(
+                                                "Paciente no encontrado con ID: "
+                                                        + dto.getPacienteId()));
 
-        Consulta consulta = Consulta.builder()
-                .paciente(paciente)
-                .veterinarioId(dto.getVeterinarioId())
-                .nombreVeterinario(dto.getNombreVeterinario())
-                .tipoServicio(dto.getTipoServicio())
-                .pesoKg(dto.getPesoKg())
-                .motivoConsulta(dto.getMotivoConsulta())
-                .diagnostico(dto.getDiagnostico())
-                .medicamentosRecetados(dto.getMedicamentosRecetados())
-                .indicaciones(dto.getIndicaciones())
-                .proximoControl(dto.getProximoControl())
-                .build();
+        Consulta consulta =
+                Consulta.builder()
+                        .paciente(paciente)
+                        .veterinarioId(dto.getVeterinarioId())
+                        .nombreVeterinario(dto.getNombreVeterinario())
+                        .tipoServicio(dto.getTipoServicio())
+                        .pesoKg(dto.getPesoKg())
+                        .motivoConsulta(dto.getMotivoConsulta())
+                        .diagnostico(dto.getDiagnostico())
+                        .medicamentosRecetados(dto.getMedicamentosRecetados())
+                        .indicaciones(dto.getIndicaciones())
+                        .proximoControl(dto.getProximoControl())
+                        .build();
 
         if (dto.getVacunasAplicadas() != null) {
-            List<VacunaRegistro> vacunas = dto.getVacunasAplicadas().stream()
-                    .map(v -> VacunaRegistro.builder()
-                            .consulta(consulta)
-                            .nombreVacuna(v.getNombreVacuna())
-                            .lote(v.getLote())
-                            .fechaAplicacion(v.getFechaAplicacion())
-                            .fechaVencimiento(v.getFechaVencimiento())
-                            .build())
-                    .collect(Collectors.toList());
+            List<VacunaRegistro> vacunas =
+                    dto.getVacunasAplicadas().stream()
+                            .map(
+                                    v ->
+                                            VacunaRegistro.builder()
+                                                    .consulta(consulta)
+                                                    .nombreVacuna(v.getNombreVacuna())
+                                                    .lote(v.getLote())
+                                                    .fechaAplicacion(v.getFechaAplicacion())
+                                                    .fechaVencimiento(v.getFechaVencimiento())
+                                                    .build())
+                            .collect(Collectors.toList());
             consulta.setVacunasAplicadas(vacunas);
         }
 
@@ -65,7 +75,9 @@ public class ConsultaService {
 
     @Transactional(readOnly = true)
     public List<VacunaRegistroDTO> obtenerHistorialVacunas(Long pacienteId) {
-        return vacunaRepository.findByConsultaPacienteIdOrderByFechaVencimientoAsc(pacienteId).stream()
+        return vacunaRepository
+                .findByConsultaPacienteIdOrderByFechaVencimientoAsc(pacienteId)
+                .stream()
                 .map(this::toVacunaDTO)
                 .collect(Collectors.toList());
     }
@@ -73,22 +85,38 @@ public class ConsultaService {
     @Transactional(readOnly = true)
     public List<VacunaRegistroDTO> obtenerVacunasPorVencer(int diasAnticipacion) {
         LocalDate hoy = LocalDate.now();
-        return vacunaRepository.findByFechaVencimientoBetween(hoy, hoy.plusDays(diasAnticipacion)).stream()
+        return vacunaRepository
+                .findByFechaVencimientoBetween(
+                    hoy,
+                    hoy.plusDays(diasAnticipacion)
+                )
+                .stream()
                 .map(this::toVacunaDTO)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<ConsultaResponseDTO> reporteAtencionesPorPeriodo(LocalDateTime inicio, LocalDateTime fin) {
-        return consultaRepository.findByFechaConsultaBetweenOrderByFechaConsultaDesc(inicio, fin).stream()
+    public List<ConsultaResponseDTO> reporteAtencionesPorPeriodo(
+        LocalDateTime inicio,
+        LocalDateTime fin
+    ) {
+        return consultaRepository
+                .findByFechaConsultaBetweenOrderByFechaConsultaDesc(
+                    inicio,
+                    fin
+                )
+                .stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
     public ConsultaResponseDTO toResponseDTO(Consulta c) {
-        List<VacunaRegistroDTO> vacunas = c.getVacunasAplicadas() != null
-                ? c.getVacunasAplicadas().stream().map(this::toVacunaDTO).collect(Collectors.toList())
-                : new ArrayList<>();
+        List<VacunaRegistroDTO> vacunas =
+                c.getVacunasAplicadas() != null
+                        ? c.getVacunasAplicadas().stream()
+                                .map(this::toVacunaDTO)
+                                .collect(Collectors.toList())
+                        : new ArrayList<>();
 
         return ConsultaResponseDTO.builder()
                 .id(c.getId())

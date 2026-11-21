@@ -17,7 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/fichas")
 @CrossOrigin(origins = "*")
-@ArgsConstructor
+@RequiredArgsConstructor
 public class PacienteController {
 
     private final PacienteService pacienteService;
@@ -39,27 +39,44 @@ public class PacienteController {
     }
 
     @PostMapping
-    public ResponseEntity<PacienteResponseDTO> crearFicha(@Valid @RequestBody PacienteRequestDTO dto) {
+    public ResponseEntity<PacienteResponseDTO> crearFicha(
+            @Valid @RequestBody PacienteRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(pacienteService.crear(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PacienteResponseDTO> actualizarFicha(@PathVariable Long id,
-                                                               @Valid @RequestBody PacienteRequestDTO dto) {
-        return ResponseEntity.ok(pacienteService.actualizar(id, dto));
+    public ResponseEntity<PacienteResponseDTO> actualizarFicha(
+        @PathVariable Long id,
+        @Valid @RequestBody PacienteRequestDTO dto
+    ) {
+        return ResponseEntity.ok(pacienteService.actualizar(
+            id,
+            dto
+        ));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity desactivarFicha(@PathVariable Long id) {
         pacienteService.desactivar(id);
-        return ResponseEntity.ok(Map.of("mensaje", "Ficha desactivada correctamente"));
+        return ResponseEntity.ok(Map.of(
+            "mensaje",
+            "Ficha desactivada correctamente"
+        ));
     }
 
     // Reporte de pacientes nuevos en un rango de fechas
     @GetMapping("/reportes/nuevos")
     public ResponseEntity contarPacientesNuevos(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin) {
-        return ResponseEntity.ok(Map.of("pacientesNuevos", pacienteService.contarPacientesNuevos(inicio, fin)));
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin
+    ) {
+        return ResponseEntity.ok(
+                Map.of(
+                    "pacientesNuevos",
+                    pacienteService.contarPacientesNuevos(
+                        inicio,
+                        fin
+                    )
+                ));
     }
 }

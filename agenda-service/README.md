@@ -12,7 +12,7 @@ La conexión local utiliza `root` con contraseña vacía. Flyway crea las tablas
 
 ## Probar en Postman
 
-Importa `Agenda.postman_collection.json`. Ejecuta primero «Crear horario» y después «Reservar cita». La colección guarda los IDs para las siguientes peticiones.
+Crea las peticiones manualmente en Postman. Primero crea un horario y luego reserva una cita usando el ID recibido.
 
 Ejemplo de POST a `/api/horarios`, usando una fecha futura.
 
@@ -65,4 +65,8 @@ La API admite React desde `localhost:5173` y `127.0.0.1:5173`. El formulario de 
 
 Los nombres de dueño, mascota, servicio y veterinario se reciben como texto. Su asociación con registros de otros servicios y los permisos de administración se integrarán cuando estén disponibles. La API escucha localmente en `127.0.0.1`.
 
-`AgendaApiTests.java` comprueba los endpoints, las validaciones y dos solicitudes simultáneas mediante una base temporal en memoria.
+Las pruebas están en `src/test/java/cl/veterinariasanmarcos/agenda/controller`: `CitaControllerTest.java` y `HorarioControllerTest.java`. Abre un archivo y pulsa **Run Test**.
+
+Usan `@WebMvcTest`, MockMvc y un servicio simulado con `@MockitoBean`. Cada prueba prepara la respuesta con `when(...).thenReturn(...)`, realiza la petición con `mockMvc.perform(...)` y comprueba el resultado con `andExpect(...)`. `@BeforeEach` prepara los datos que se repiten antes de cada prueba.
+
+No necesitan MySQL. Comprueban las rutas, las respuestas y las validaciones de entrada; no prueban la base de datos ni dos reservas simultáneas.

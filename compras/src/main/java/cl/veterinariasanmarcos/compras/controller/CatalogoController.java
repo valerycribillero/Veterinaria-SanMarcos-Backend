@@ -35,7 +35,8 @@ public class CatalogoController {
     }
 
     @GetMapping("/categoria/{categoria}")
-    public ResponseEntity<List<ProductoServicioDTO>> listarPorCategoria(@PathVariable String categoria) {
+    public ResponseEntity<List<ProductoServicioDTO>> listarPorCategoria(
+            @PathVariable String categoria) {
         return ResponseEntity.ok(catalogoService.listarPorCategoria(categoria));
     }
 
@@ -45,14 +46,20 @@ public class CatalogoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductoServicioDTO> crearOActualizar(@Valid @RequestBody ProductoServicioDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(catalogoService.guardarOActualizar(dto));
+    public ResponseEntity<ProductoServicioDTO> crearOActualizar(
+            @Valid @RequestBody ProductoServicioDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(catalogoService.guardarOActualizar(dto));
     }
 
     @PatchMapping("/{codigo}/stock")
     public ResponseEntity<ProductoServicioDTO> actualizarStock(
-            @PathVariable String codigo,
-            @RequestParam int stock) {
-        return ResponseEntity.ok(catalogoService.actualizarStock(codigo.toUpperCase(), stock));
+        @PathVariable String codigo,
+        @RequestParam int stock
+    ) {
+        return ResponseEntity.ok(catalogoService.actualizarStock(
+            codigo.toUpperCase(),
+            stock
+        ));
     }
 }

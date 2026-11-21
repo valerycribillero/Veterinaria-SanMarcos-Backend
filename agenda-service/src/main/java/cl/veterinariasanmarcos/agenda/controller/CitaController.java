@@ -36,8 +36,14 @@ public class CitaController {
     }
 
     @PutMapping("/{id}")
-    public Cita actualizar(@PathVariable Long id, @Valid @RequestBody DatosCita datos) {
-        return service.actualizar(id, datos);
+    public Cita actualizar(
+        @PathVariable Long id,
+        @Valid @RequestBody DatosCita datos
+    ) {
+        return service.actualizar(
+            id,
+            datos
+        );
     }
 
     @PutMapping("/{id}/atendida")

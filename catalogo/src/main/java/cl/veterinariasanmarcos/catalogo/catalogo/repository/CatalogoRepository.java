@@ -1,4 +1,3 @@
-
 package cl.veterinariasanmarcos.catalogo.catalogo.repository;
 
 import java.util.List;
@@ -12,5 +11,4 @@ import cl.veterinariasanmarcos.catalogo.catalogo.model.Catalogo;
 public interface CatalogoRepository extends JpaRepository<Catalogo, Integer> {
 
     List<Catalogo> findByCategoriaContainingIgnoreCase(String categoria);
-
 }

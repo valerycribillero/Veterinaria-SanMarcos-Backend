@@ -15,7 +15,11 @@ import cl.veterinariasanmarcos.productos.repository.ProductoRepository;
 public class ProductoService {
     private final ProductoRepository repository;
     private final EntityManager entityManager;
-    public ProductoService(ProductoRepository repository, EntityManager entityManager) {
+
+    public ProductoService(
+        ProductoRepository repository,
+        EntityManager entityManager
+    ) {
         this.repository = repository;
         this.entityManager = entityManager;
     }
@@ -27,32 +31,57 @@ public class ProductoService {
 
     @Transactional(readOnly = true)
     public Producto buscar(String codigo) {
-        return repository.findByCodigoAndActivoTrue(codigo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado"));
+        return repository
+                .findByCodigoAndActivoTrue(codigo)
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                    HttpStatus.NOT_FOUND,
+                                    "Producto no encontrado"
+                                ));
     }
 
     public Producto crear(DatosProducto datos) {
         if (repository.existsById(datos.codigo())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "El código de producto ya existe");
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "El código de producto ya existe"
+            );
         }
         Producto producto = new Producto(datos.codigo());
-        aplicar(producto, datos);
-        // persist garantiza INSERT; un código duplicado concurrente no actualiza el producto existente.
+        aplicar(
+            producto,
+            datos
+        );
+        // persist garantiza INSERT; un código duplicado concurrente no actualiza el producto
+        // existente.
         entityManager.persist(producto);
         entityManager.flush();
         return producto;
     }
 
-    public Producto actualizar(String codigo, DatosProducto datos) {
+    public Producto actualizar(
+        String codigo,
+        DatosProducto datos
+    ) {
         if (!codigo.equals(datos.codigo())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El código de producto no se puede cambiar");
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "El código de producto no se puede cambiar"
+            );
         }
         Producto producto = bloquearActivo(codigo);
-        aplicar(producto, datos);
+        aplicar(
+            producto,
+            datos
+        );
         return producto;
     }
 
-    public Producto actualizarStock(String codigo, int stock) {
+    public Producto actualizarStock(
+        String codigo,
+        int stock
+    ) {
         Producto producto = bloquearActivo(codigo);
         producto.setStock(stock);
         return producto;
@@ -63,11 +92,21 @@ public class ProductoService {
     }
 
     public Producto bloquearActivo(String codigo) {
-        return repository.bloquear(codigo).filter(Producto::isActivo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado: " + codigo));
+        return repository
+                .bloquear(codigo)
+                .filter(Producto::isActivo)
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                    HttpStatus.NOT_FOUND,
+                                    "Producto no encontrado: " + codigo
+                                ));
     }
 
-    private void aplicar(Producto producto, DatosProducto datos) {
+    private void aplicar(
+        Producto producto,
+        DatosProducto datos
+    ) {
         producto.setNombre(datos.nombre());
         producto.setCategoria(datos.categoria());
         producto.setPrecio(datos.precio());

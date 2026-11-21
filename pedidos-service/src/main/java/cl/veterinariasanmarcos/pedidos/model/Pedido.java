@@ -12,48 +12,81 @@ import cl.veterinariasanmarcos.pedidos.dto.ReservaProducto;
 @Table(name = "pedido")
 public class Pedido {
     public enum Estado {
-        PENDIENTE, CONFIRMADO, ENVIADO, ENTREGADO, CANCELACION_PENDIENTE, CANCELADO
+        PENDIENTE,
+        CONFIRMADO,
+        ENVIADO,
+        ENTREGADO,
+        CANCELACION_PENDIENTE,
+        CANCELADO
     }
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 64)
+    @Column(
+        nullable = false,
+        unique = true,
+        length = 64
+    )
     private String referencia;
 
-    @Column(name = "nombre_completo", nullable = false, length = 150)
+    @Column(
+        name = "nombre_completo",
+        nullable = false,
+        length = 150
+    )
     private String nombreCompleto;
 
-    @Column(nullable = false, length = 150)
+    @Column(
+        nullable = false,
+        length = 150
+    )
     private String correo;
 
-    @Column(nullable = false, length = 300)
+    @Column(
+        nullable = false,
+        length = 300
+    )
     private String direccion;
 
-    @Column(nullable = false, length = 30)
+    @Column(
+        nullable = false,
+        length = 30
+    )
     private String metodo;
 
     @Column(nullable = false)
     private LocalDateTime fecha;
 
     @Enumerated(EnumType.STRING)
-
-    @Column(nullable = false, length = 30)
+    @Column(
+        nullable = false,
+        length = 30
+    )
     private Estado estado = Estado.PENDIENTE;
 
-    @Column(nullable = false, precision = 18, scale = 0)
+    @Column(
+        nullable = false,
+        precision = 18,
+        scale = 0
+    )
     private BigDecimal total = BigDecimal.ZERO;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
-
+    @OneToMany(
+        mappedBy = "pedido",
+        cascade = CascadeType.ALL
+    )
     @OrderBy("codigo ASC")
     private List<DetallePedido> productos = new ArrayList<>();
+
     protected Pedido() {
     }
 
-    public Pedido(String referencia, NuevoPedido datos) {
+    public Pedido(
+        String referencia,
+        NuevoPedido datos
+    ) {
         this.referencia = referencia;
         this.nombreCompleto = datos.nombreCompleto();
         this.correo = datos.correo();
@@ -61,16 +94,29 @@ public class Pedido {
         this.metodo = datos.metodo();
         this.fecha = LocalDateTime.now();
         for (var linea : datos.productos()) {
-            productos.add(new DetallePedido(this, linea.codigo(), linea.cantidad()));
+            productos.add(new DetallePedido(
+                this,
+                linea.codigo(),
+                linea.cantidad()
+            ));
         }
     }
 
     public NuevoPedido solicitud() {
         List<NuevoPedido.Linea> lineas = new ArrayList<>();
         for (var producto : productos) {
-            lineas.add(new NuevoPedido.Linea(producto.getCodigo(), producto.getCantidad()));
+            lineas.add(new NuevoPedido.Linea(
+                producto.getCodigo(),
+                producto.getCantidad()
+            ));
         }
-        return new NuevoPedido(nombreCompleto, correo, direccion, metodo, lineas);
+        return new NuevoPedido(
+            nombreCompleto,
+            correo,
+            direccion,
+            metodo,
+            lineas
+        );
     }
 
     public void confirmar(ReservaProducto reserva) {
@@ -89,7 +135,10 @@ public class Pedido {
             if (producto.getCantidad() != precio.cantidad()) {
                 throw new IllegalStateException("La reserva no coincide con el pedido");
             }
-            producto.fijarPrecio(precio.nombre(), precio.precioUnitario());
+            producto.fijarPrecio(
+                precio.nombre(),
+                precio.precioUnitario()
+            );
             total = total.add(producto.getSubtotal());
         }
         estado = Estado.CONFIRMADO;
@@ -138,5 +187,4 @@ public class Pedido {
     public List<DetallePedido> getProductos() {
         return productos;
     }
-
 }

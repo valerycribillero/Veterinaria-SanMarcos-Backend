@@ -55,6 +55,8 @@ Las APIs de administración y los listados de compras necesitan integrar autenti
 
 ## Pruebas
 
-`ServiciosApiTests.java` arranca las dos aplicaciones con bases H2 separadas y ejercita su comunicación HTTP. Incluye fallos después de reservar o devolver stock y comprueba los reintentos. La dependencia de Productos en este proyecto se usa únicamente al ejecutar esas pruebas. El servicio empaquetado se comunica mediante HTTP.
+Abre `src/test/java/cl/veterinariasanmarcos/pedidos/controller/PedidoControllerTest.java` y pulsa **Run Test**. Usa `@WebMvcTest`, MockMvc y Mockito para comprobar crear, listar, buscar, confirmar y cambiar el estado de un pedido, además de respuestas a datos inválidos y pedidos inexistentes.
 
-Las pruebas conjuntas se ejecutan desde el proyecto raíz para que el entorno prepare ambos módulos.
+`when(...).thenReturn(...)` prepara la respuesta del servicio simulado. `mockMvc.perform(...)` hace la petición y `andExpect(...)` comprueba el resultado. En Spring Boot 4, `@MockitoBean` cumple el papel de `@MockBean` de ejemplos anteriores.
+
+Estas pruebas no necesitan MySQL ni Productos iniciado. Comprueban el controlador y las validaciones de entrada; no prueban el cálculo de stock ni la comunicación real entre servicios.

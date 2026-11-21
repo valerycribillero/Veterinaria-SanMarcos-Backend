@@ -17,32 +17,55 @@ import cl.veterinariasanmarcos.agenda.dto.DatosCita;
 @Table(name = "cita")
 public class Cita {
     public enum Estado {
-        RESERVADA, ATENDIDA, CANCELADA
+        RESERVADA,
+        ATENDIDA,
+        CANCELADA
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "horario_id", nullable = false)
+    @Column(
+        name = "horario_id",
+        nullable = false
+    )
     private Long horarioId;
 
-    @Column(nullable = false, length = 150)
+    @Column(
+        nullable = false,
+        length = 150
+    )
     private String dueno;
 
-    @Column(nullable = false, length = 150)
+    @Column(
+        nullable = false,
+        length = 150
+    )
     private String correo;
 
-    @Column(nullable = false, length = 100)
+    @Column(
+        nullable = false,
+        length = 100
+    )
     private String mascota;
 
-    @Column(nullable = false, length = 50)
+    @Column(
+        nullable = false,
+        length = 50
+    )
     private String especie;
 
-    @Column(nullable = false, length = 150)
+    @Column(
+        nullable = false,
+        length = 150
+    )
     private String servicio;
 
-    @Column(nullable = false, length = 2000)
+    @Column(
+        nullable = false,
+        length = 2000
+    )
     private String motivo;
 
     @Column(nullable = false)
@@ -51,25 +74,45 @@ public class Cita {
     @Column(nullable = false)
     private LocalTime hora;
 
-    @Column(nullable = false, length = 150)
+    @Column(
+        nullable = false,
+        length = 150
+    )
     private String veterinario;
 
-    @Column(name = "fecha_creacion", nullable = false, updatable = false)
+    @Column(
+        name = "fecha_creacion",
+        nullable = false,
+        updatable = false
+    )
     private LocalDateTime fechaCreacion;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(
+        nullable = false,
+        length = 20
+    )
     private Estado estado = Estado.RESERVADA;
 
     protected Cita() {
     }
 
-    public Cita(DatosCita datos, Horario horario, LocalDateTime fechaCreacion) {
+    public Cita(
+        DatosCita datos,
+        Horario horario,
+        LocalDateTime fechaCreacion
+    ) {
         this.fechaCreacion = fechaCreacion;
-        actualizar(datos, horario);
+        actualizar(
+            datos,
+            horario
+        );
     }
 
-    public void actualizar(DatosCita datos, Horario horario) {
+    public void actualizar(
+        DatosCita datos,
+        Horario horario
+    ) {
         horarioId = horario.getId();
         dueno = datos.dueno();
         correo = datos.correo();

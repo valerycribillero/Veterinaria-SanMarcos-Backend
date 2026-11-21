@@ -6,7 +6,8 @@ import cl.veterinariasanmarcos.mascota.mascota.model.Especie;
 import cl.veterinariasanmarcos.mascota.mascota.model.Sexo;
 
 import lombok.Data;
-@Data 
+
+@Data
 public class ListarMascotasDTO {
 
     private String nombre;
@@ -18,6 +19,4 @@ public class ListarMascotasDTO {
     private Long clienteId;
     private Boolean activo = true;
     private LocalDateTime creadoEn = LocalDateTime.now();
-
-
 }

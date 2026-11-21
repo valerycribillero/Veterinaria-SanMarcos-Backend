@@ -16,39 +16,66 @@ import jakarta.persistence.Table;
 public class Contacto {
 
     public enum Estado {
-        PENDIENTE, ATENDIDO
+        PENDIENTE,
+        ATENDIDO
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre_completo", nullable = false, length = 150)
+    @Column(
+        name = "nombre_completo",
+        nullable = false,
+        length = 150
+    )
     private String nombreCompleto;
 
-    @Column(nullable = false, length = 150)
+    @Column(
+        nullable = false,
+        length = 150
+    )
     private String correo;
 
     @Column(length = 25)
     private String telefono;
 
-    @Column(nullable = false, length = 100)
+    @Column(
+        nullable = false,
+        length = 100
+    )
     private String asunto;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(
+        nullable = false,
+        columnDefinition = "TEXT"
+    )
     private String mensaje;
 
-    @Column(name = "fecha_creacion", nullable = false, updatable = false)
+    @Column(
+        name = "fecha_creacion",
+        nullable = false,
+        updatable = false
+    )
     private LocalDateTime fechaCreacion;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(
+        nullable = false,
+        length = 20
+    )
     private Estado estado;
 
     protected Contacto() {
     }
 
-    public Contacto(String nombreCompleto, String correo, String telefono, String asunto, String mensaje) {
+    public Contacto(
+        String nombreCompleto,
+        String correo,
+        String telefono,
+        String asunto,
+        String mensaje
+    ) {
         this.nombreCompleto = nombreCompleto;
         this.correo = correo;
         this.telefono = telefono;
@@ -58,14 +85,37 @@ public class Contacto {
         this.estado = Estado.PENDIENTE;
     }
 
-    public Long getId() { return id; }
-    public String getNombreCompleto() { return nombreCompleto; }
-    public String getCorreo() { return correo; }
-    public String getTelefono() { return telefono; }
-    public String getAsunto() { return asunto; }
-    public String getMensaje() { return mensaje; }
-    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
-    public Estado getEstado() { return estado; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public String getAsunto() {
+        return asunto;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
 
     public void marcarAtendido() {
         this.estado = Estado.ATENDIDO;

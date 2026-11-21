@@ -19,45 +19,54 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity 
+@Entity
 @Table(name = "mascotas")
-@AllArgsConstructor 
+@AllArgsConstructor
 @NoArgsConstructor
-@Getter 
-@Setter 
+@Getter
+@Setter
 public class Mascota {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "La mascota debe tener un nombre")
-    @Column(nullable = false, length = 60)
+    @Column(
+        nullable = false,
+        length = 60
+    )
     private String nombre;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
-    private Especie especie;          
+    @Column(
+        nullable = false,
+        length = 10
+    )
+    private Especie especie;
 
     @Size(max = 60)
-    private String raza;              
+    private String raza;
 
     @Min(0)
     @Column(nullable = false)
-    private Integer edad;            
+    private Integer edad;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
-    private Sexo sexo;                
+    private Sexo sexo;
 
-    private Double pesoKg;            
+    private Double pesoKg;
 
     @NotNull(message = "La mascota debe contar con el id de su dueño")
-    @Column(name = "cliente_id", nullable = false)
+    @Column(
+        name = "cliente_id",
+        nullable = false
+    )
     private Long clienteId;
 
     @Column(nullable = false)
-    private Boolean activo = true;  
+    private Boolean activo = true;
 
     @Column(updatable = false)
     private LocalDateTime creadoEn = LocalDateTime.now();
@@ -66,6 +75,4 @@ public class Mascota {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setId'");
     }
-
-
 }
