@@ -1,5 +1,6 @@
 CREATE TABLE producto (
     id INT NOT NULL AUTO_INCREMENT,
+    codigo VARCHAR(20) NOT NULL,
     categoria VARCHAR(50) NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     principio_activo VARCHAR(100),
