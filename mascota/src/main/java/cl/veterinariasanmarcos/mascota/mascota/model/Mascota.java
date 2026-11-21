@@ -42,6 +42,7 @@ public class Mascota {
     @Size(max = 60)
     private String raza;              
 
+    @NotNull
     @Min(0)
     @Column(nullable = false)
     private Integer edad;            
@@ -61,11 +62,5 @@ public class Mascota {
 
     @Column(updatable = false)
     private LocalDateTime creadoEn = LocalDateTime.now();
-
-    public void setId(Integer id2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setId'");
-    }
-
 
 }
