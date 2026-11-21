@@ -1,0 +1,9 @@
+CREATE TABLE registro (
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    rol VARCHAR(20) NOT NULL,
+
+    PRIMARY KEY (id)
+);
