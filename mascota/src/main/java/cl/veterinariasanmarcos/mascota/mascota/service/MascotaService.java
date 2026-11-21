@@ -24,16 +24,29 @@ public class MascotaService {
         return mascotaRepository.save(mascota);
     }
 
-    public Mascota obtenerPorId(Integer id) {
+    public Mascota obtenerPorId(Long id) {
         return mascotaRepository.findById(id).orElse(null);
     }
 
-    public void eliminarMascota(Integer id) {
+    public List<Mascota> obtenerPorClienteId(Long clienteId) {
+        return mascotaRepository.findByClienteId(clienteId);
+    }
+
+    public void eliminarMascota(Long id) {
         mascotaRepository.deleteById(id);
     }
 
-    public Mascota actualizarMascota(Integer id, Mascota mascota) {
-        mascota.setId(id);
+    public Mascota actualizarMascota(Long id, Mascota datos) {
+        Mascota mascota = mascotaRepository.findById(id).orElse(null);
+        if (mascota == null) return null;
+        mascota.setNombre(datos.getNombre());
+        mascota.setEspecie(datos.getEspecie());
+        mascota.setRaza(datos.getRaza());
+        mascota.setEdad(datos.getEdad());
+        mascota.setSexo(datos.getSexo());
+        mascota.setPesoKg(datos.getPesoKg());
+        mascota.setClienteId(datos.getClienteId());
+        if (datos.getActivo() != null) mascota.setActivo(datos.getActivo());
         return mascotaRepository.save(mascota);
     }
 
