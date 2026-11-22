@@ -20,6 +20,18 @@ public class ConsultaController {
 
     private final ConsultaService consultaService;
 
+    @GetMapping
+    public List<ConsultaResponseDTO> listarConsultas(
+        @RequestParam(required = false) Long veterinarioId
+    ) {
+        return consultaService.listarConsultas(veterinarioId);
+    }
+
+    @GetMapping("/{id}")
+    public ConsultaResponseDTO obtenerPorId(@PathVariable Long id) {
+        return consultaService.obtenerPorId(id);
+    }
+
     @PostMapping
     public ResponseEntity<ConsultaResponseDTO> registrarConsulta(
             @Valid @RequestBody ConsultaRequestDTO dto) {

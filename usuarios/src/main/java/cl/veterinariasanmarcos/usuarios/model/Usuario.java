@@ -49,7 +49,26 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     @Column(
         nullable = false,
-        length = 10
+        length = 20
     )
     private Rol rol;
+
+    @Column(length = 25)
+    private String telefono;
+
+    @Column(length = 100)
+    private String ciudad;
+
+    @Column(length = 150)
+    private String especialidad;
+
+    @Column(length = 100)
+    private String experiencia;
+
+    @Column(length = 2000)
+    private String bio;
+
+    @Column(length = 500)
+    private String imagen;
+
 }

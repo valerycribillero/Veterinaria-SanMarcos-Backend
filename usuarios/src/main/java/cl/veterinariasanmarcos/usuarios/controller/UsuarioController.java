@@ -1,6 +1,9 @@
 package cl.veterinariasanmarcos.usuarios.controller;
 
 import cl.veterinariasanmarcos.usuarios.dto.UsuarioListadoDTO;
+import cl.veterinariasanmarcos.usuarios.dto.DatosIngreso;
+import cl.veterinariasanmarcos.usuarios.dto.MiembroEquipo;
+import cl.veterinariasanmarcos.usuarios.dto.SesionUsuario;
 import cl.veterinariasanmarcos.usuarios.model.Usuario;
 import cl.veterinariasanmarcos.usuarios.service.UsuarioService;
 
@@ -33,6 +36,17 @@ public class UsuarioController {
 
     public UsuarioController(UsuarioService service) {
         this.service = service;
+    }
+
+    @PostMapping("/login")
+    public SesionUsuario iniciarSesion(@Valid @RequestBody DatosIngreso datos) {
+        return service.iniciarSesion(datos);
+    }
+
+    @PostMapping("/cliente")
+    public ResponseEntity<Usuario> registrarCliente(@Valid @RequestBody Usuario usuario) {
+        Usuario nuevo = service.registrarCliente(usuario);
+        return ResponseEntity.status(201).body(nuevo);
     }
 
     @Operation(summary = "Listar", description = "Obtiee todos los usuarios registrados")
@@ -145,4 +159,10 @@ public class UsuarioController {
     public List<UsuarioListadoDTO> listarDTO() {
         return service.listarDTO();
     }
+
+    @GetMapping("/equipo")
+    public List<MiembroEquipo> obtenerEquipo() {
+        return service.obtenerEquipo();
+    }
+
 }

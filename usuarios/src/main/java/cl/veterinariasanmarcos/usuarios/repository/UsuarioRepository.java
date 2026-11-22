@@ -11,4 +11,6 @@ import cl.veterinariasanmarcos.usuarios.model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Optional<Usuario> findById(Integer id);
+
+    Optional<Usuario> findByEmailIgnoreCase(String email);
 }

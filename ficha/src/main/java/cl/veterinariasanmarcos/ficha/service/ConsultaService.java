@@ -22,6 +22,24 @@ public class ConsultaService {
     private final PacienteRepository pacienteRepository;
     private final VacunaRegistroRepository vacunaRepository;
 
+    @Transactional(readOnly = true)
+    public List<ConsultaResponseDTO> listarConsultas(Long veterinarioId) {
+        List<Consulta> consultas = veterinarioId == null
+                ? consultaRepository.findAllByOrderByFechaConsultaDesc()
+                : consultaRepository.findByVeterinarioIdOrderByFechaConsultaDesc(veterinarioId);
+
+        return consultas.stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ConsultaResponseDTO obtenerPorId(Long id) {
+        Consulta consulta = consultaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Consulta no encontrada"));
+        return toResponseDTO(consulta);
+    }
+
     @Transactional
     public ConsultaResponseDTO registrarConsulta(ConsultaRequestDTO dto) {
         Paciente paciente =
