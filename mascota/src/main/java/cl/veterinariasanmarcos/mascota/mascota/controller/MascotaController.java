@@ -31,7 +31,10 @@ public class MascotaController {
 
     @Autowired private MascotaService service;
 
-    @Operation(summary = "Listar mascotas", description = "Obtiene todas las mascotas registradas")
+    @Operation(
+        summary = "Listar mascotas",
+        description = "Devuelve las mascotas registradas. Si se envía clienteId, devuelve solo las mascotas de ese cliente."
+    )
     @ApiResponses(
             value = {
                 @ApiResponse(responseCode = "200", description = "Lista obtenida correctamente"),
@@ -56,6 +59,10 @@ public class MascotaController {
         return mascota == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(mascota);
     }
 
+    @Operation(
+        summary = "Listar mascotas",
+        description = "Devuelve las mascotas registradas. Si se envía clienteId, devuelve solo las mascotas de ese cliente."
+    )
     @GetMapping(params = "clienteId")
     public ResponseEntity<List<Mascota>> listarPorCliente(@RequestParam Long clienteId) {
         return ResponseEntity.ok(service.obtenerPorClienteId(clienteId));

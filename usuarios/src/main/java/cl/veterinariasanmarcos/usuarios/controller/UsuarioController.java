@@ -38,18 +38,26 @@ public class UsuarioController {
         this.service = service;
     }
 
+    @Operation(
+        summary = "Iniciar sesión",
+        description = "Valida el correo y la contraseña y devuelve los datos de la sesión, incluido el rol del usuario."
+    )
     @PostMapping("/login")
     public SesionUsuario iniciarSesion(@Valid @RequestBody DatosIngreso datos) {
         return service.iniciarSesion(datos);
     }
 
+    @Operation(
+        summary = "Registrar cliente",
+        description = "Crea una cuenta con rol de cliente usando los datos del cuerpo de la petición."
+    )
     @PostMapping("/cliente")
     public ResponseEntity<Usuario> registrarCliente(@Valid @RequestBody Usuario usuario) {
         Usuario nuevo = service.registrarCliente(usuario);
         return ResponseEntity.status(201).body(nuevo);
     }
 
-    @Operation(summary = "Listar", description = "Obtiee todos los usuarios registrados")
+    @Operation(summary = "Listar usuarios", description = "Devuelve la lista de usuarios registrados.")
     @ApiResponses(
             value = {
                 @ApiResponse(responseCode = "200", description = "lista obtenida correctamente"),
@@ -119,7 +127,7 @@ public class UsuarioController {
 
     @Operation(
             summary = "Actualizar usuario",
-            description = "Permite actulizar datos de un usuario ya registrado")
+            description = "Actualiza los datos de un usuario ya registrado.")
     @ApiResponses(
             value = {
                 @ApiResponse(
@@ -160,6 +168,10 @@ public class UsuarioController {
         return service.listarDTO();
     }
 
+    @Operation(
+        summary = "Consultar equipo de la veterinaria",
+        description = "Devuelve la información pública de los integrantes del equipo."
+    )
     @GetMapping("/equipo")
     public List<MiembroEquipo> obtenerEquipo() {
         return service.obtenerEquipo();

@@ -1,5 +1,6 @@
 package cl.veterinariasanmarcos.pedidos.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.UUID;
 import jakarta.validation.Valid;
@@ -27,6 +28,10 @@ public class PedidoController {
         this.service = service;
     }
 
+    @Operation(
+        summary = "Crear pedido de tienda",
+        description = "Registra el pedido e intenta reservar stock en Productos. El encabezado Idempotency-Key permite repetir la solicitud sin duplicar el pedido."
+    )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoVista crear(
@@ -47,21 +52,37 @@ public class PedidoController {
         );
     }
 
+    @Operation(
+        summary = "Reintentar confirmación del pedido",
+        description = "Vuelve a intentar la reserva de stock y la confirmación de un pedido pendiente."
+    )
     @PostMapping("/{id}/confirmar")
     public PedidoVista confirmar(@PathVariable Long id) {
         return service.confirmar(id);
     }
 
+    @Operation(
+        summary = "Listar pedidos de tienda",
+        description = "Devuelve los pedidos registrados, incluidas las solicitudes pendientes."
+    )
     @GetMapping
     public List<PedidoVista> listar() {
         return service.listar();
     }
 
+    @Operation(
+        summary = "Buscar pedido por ID",
+        description = "Devuelve el pedido indicado con sus productos y su estado."
+    )
     @GetMapping("/{id}")
     public PedidoVista buscar(@PathVariable Long id) {
         return service.buscar(id);
     }
 
+    @Operation(
+        summary = "Cambiar estado del pedido",
+        description = "Aplica la transición de estado solicitada. Al cancelar un pedido confirmado, el servicio devuelve el stock reservado."
+    )
     @PatchMapping("/{id}/estado")
     public PedidoVista cambiarEstado(
         @PathVariable Long id,

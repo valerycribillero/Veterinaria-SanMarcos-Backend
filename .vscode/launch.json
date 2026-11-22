@@ -6,10 +6,27 @@
     "configurations": [
         {
             "type": "java",
-            "name": "TiendaServiceApplication",
+            "name": "Eureka Server (8761)",
             "request": "launch",
-            "mainClass": "cl.veterinariasanmarcos.tienda.TiendaServiceApplication",
-            "projectName": ""
+            "mainClass": "cl.veterinariasanmarcos.eureka.EurekaServerApplication",
+            "projectName": "eureka-server"
+        },
+        {
+            "type": "java",
+            "name": "API Gateway (8080)",
+            "request": "launch",
+            "mainClass": "cl.veterinariasanmarcos.gateway.ApiGatewayApplication",
+            "projectName": "api-gateway"
+        },
+        {
+            "type": "java",
+            "name": "Microservicio actual con Eureka",
+            "request": "launch",
+            "mainClass": "${file}",
+            "env": {
+                "EUREKA_CLIENT_ENABLED": "true",
+                "EUREKA_INSTANCE_HOSTNAME": "localhost"
+            }
         },
         {
             "type": "java",
