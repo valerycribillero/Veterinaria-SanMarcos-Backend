@@ -1,15 +1,15 @@
 package cl.veterinariasanmarcos.usuarios.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import cl.veterinariasanmarcos.usuarios.dto.UsuarioListadoDTO;
 import cl.veterinariasanmarcos.usuarios.model.Usuario;
 import cl.veterinariasanmarcos.usuarios.repository.UsuarioRepository;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -17,10 +17,7 @@ public class UsuarioService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(
-        UsuarioRepository repository,
-        PasswordEncoder passwordEncoder
-    ) {
+    public UsuarioService(UsuarioRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -39,12 +36,16 @@ public class UsuarioService {
         repository.deleteById(id);
     }
 
-    public Usuario actualizarUsuario(
-        Integer id,
-        Usuario usuario
-    ) {
-        usuario.setId(id);
-        return repository.save(usuario);
+    public Usuario actualizarUsuario(Integer id, Usuario usuario) {
+        Usuario existente = repository.findById(id).orElse(null);
+        if (existente == null) return null;
+        existente.setNombre(usuario.getNombre());
+        existente.setEmail(usuario.getEmail());
+        existente.setRol(usuario.getRol());
+        if (usuario.getPassword() != null && !usuario.getPassword().isBlank()) {
+            existente.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        }
+        return repository.save(existente);
     }
 
     public List<Usuario> listar() {
@@ -58,8 +59,10 @@ public class UsuarioService {
 
         for (Usuario u : usuarios) {
             UsuarioListadoDTO dto = new UsuarioListadoDTO();
+            dto.setId(u.getId());
             dto.setNombre((u.getNombre()));
             dto.setEmail(u.getEmail());
+            dto.setRol(u.getRol());
 
             lista.add(dto);
         }

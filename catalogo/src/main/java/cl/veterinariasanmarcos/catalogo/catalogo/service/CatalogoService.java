@@ -45,6 +45,7 @@ public class CatalogoService {
             return null;
         }
 
+        catalogo.setCodigo(datos.getCodigo());
         catalogo.setCategoria(datos.getCategoria());
         catalogo.setNombre(datos.getNombre());
         catalogo.setPrincipioActivo(datos.getPrincipioActivo());
