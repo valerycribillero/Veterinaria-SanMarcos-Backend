@@ -9,7 +9,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "consultas")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Consulta {
 
     @Id
@@ -17,27 +21,44 @@ public class Consulta {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "paciente_id", nullable = false)
+    @JoinColumn(
+        name = "paciente_id",
+        nullable = false
+    )
     private Paciente paciente;
 
     @Column(nullable = false)
     private Long veterinarioId; // ID del médico veterinario
 
-    @Column(nullable = false, length = 120)
+    @Column(
+        nullable = false,
+        length = 120
+    )
     private String nombreVeterinario;
 
     @Column(nullable = false)
     private LocalDateTime fechaConsulta;
 
-    @Column(nullable = false, length = 100)
-    private String tipoServicio; // Consulta general, Vacunación, Cirugía menor, Desparasitación, Control de peso
+    @Column(
+        nullable = false,
+        length = 100
+    )
+    private String
+            tipoServicio; // Consulta general, Vacunación, Cirugía menor, Desparasitación, Control
+                          // de peso
 
     private Double pesoKg;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(
+        nullable = false,
+        columnDefinition = "TEXT"
+    )
     private String motivoConsulta;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(
+        nullable = false,
+        columnDefinition = "TEXT"
+    )
     private String diagnostico;
 
     @Column(columnDefinition = "TEXT")
@@ -48,7 +69,11 @@ public class Consulta {
 
     private LocalDate proximoControl;
 
-    @OneToMany(mappedBy = "consulta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "consulta",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     @Builder.Default
     private List<VacunaRegistro> vacunasAplicadas = new ArrayList<>();
 

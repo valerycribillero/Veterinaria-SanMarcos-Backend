@@ -5,7 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductoDTO {
 
     @NotBlank(message = "El código del producto es obligatorio (ej. ME001)")
@@ -27,11 +30,17 @@ public class ProductoDTO {
     private String especie;
 
     @NotNull(message = "El stock actual es obligatorio")
-    @Min(value = 0, message = "El stock no puede ser negativo")
+    @Min(
+        value = 0,
+        message = "El stock no puede ser negativo"
+    )
     private Integer stockActual;
 
     @NotNull(message = "El precio unitario en CLP es obligatorio")
-    @Min(value = 0, message = "El precio no puede ser negativo")
+    @Min(
+        value = 0,
+        message = "El precio no puede ser negativo"
+    )
     private Integer precioUnitarioClp;
 
     private Boolean activo;

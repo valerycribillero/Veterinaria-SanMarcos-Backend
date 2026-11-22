@@ -1,0 +1,7 @@
+ALTER TABLE registro
+    ADD COLUMN telefono VARCHAR(25),
+    ADD COLUMN ciudad VARCHAR(100),
+    ADD COLUMN especialidad VARCHAR(150),
+    ADD COLUMN experiencia VARCHAR(100),
+    ADD COLUMN bio VARCHAR(2000),
+    ADD COLUMN imagen VARCHAR(500);

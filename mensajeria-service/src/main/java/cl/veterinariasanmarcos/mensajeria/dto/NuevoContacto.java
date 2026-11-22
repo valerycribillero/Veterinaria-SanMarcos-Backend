@@ -6,11 +6,21 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record NuevoContacto(
-        @NotBlank @Size(max = 150) String nombreCompleto,
-        @NotBlank @Email @Size(max = 150) String correo,
-        @Pattern(regexp = "\\+?[0-9]+") @Size(max = 25) String telefono,
-        @Size(max = 100) String asunto,
-        @NotBlank @Size(max = 5000) String mensaje
+    @NotBlank
+        @Size(max = 150)
+        String nombreCompleto,
+    @NotBlank
+        @Email
+        @Size(max = 150)
+        String correo,
+    @Pattern(regexp = "\\+?[0-9]+")
+        @Size(max = 25)
+        String telefono,
+    @Size(max = 100)
+        String asunto,
+    @NotBlank
+        @Size(max = 5000)
+        String mensaje
 ) {
     public NuevoContacto {
         nombreCompleto = limpiar(nombreCompleto);

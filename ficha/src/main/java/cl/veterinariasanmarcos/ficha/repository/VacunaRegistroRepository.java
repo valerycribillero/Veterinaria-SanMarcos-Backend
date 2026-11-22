@@ -9,5 +9,9 @@ import java.util.List;
 @Repository
 public interface VacunaRegistroRepository extends JpaRepository<VacunaRegistro, Long> {
     List<VacunaRegistro> findByConsultaPacienteIdOrderByFechaVencimientoAsc(Long pacienteId);
-    List<VacunaRegistro> findByFechaVencimientoBetween(LocalDate hoy, LocalDate limiteAviso);
+
+    List<VacunaRegistro> findByFechaVencimientoBetween(
+        LocalDate hoy,
+        LocalDate limiteAviso
+    );
 }
