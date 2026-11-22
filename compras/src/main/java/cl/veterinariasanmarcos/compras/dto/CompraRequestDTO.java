@@ -7,7 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.util.List;
 
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CompraRequestDTO {
 
     @NotNull(message = "El ID del dueño es obligatorio")

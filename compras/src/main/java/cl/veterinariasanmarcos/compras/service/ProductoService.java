@@ -45,43 +45,62 @@ public class ProductoService {
 
     @Transactional(readOnly = true)
     public ProductoDTO obtenerPorCodigo(String codigo) {
-        Producto producto = repository.findById(codigo.toUpperCase())
-                .filter(Producto::getActivo)
-                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con código: " + codigo));
+        Producto producto =
+                repository
+                        .findById(codigo.toUpperCase())
+                        .filter(Producto::getActivo)
+                        .orElseThrow(
+                                () ->
+                                        new EntityNotFoundException(
+                                                "Producto no encontrado con código: " + codigo));
         return toDTO(producto);
     }
 
     @Transactional
     public ProductoDTO guardarOActualizar(ProductoDTO dto) {
-        Producto producto = Producto.builder()
-                .codigo(dto.getCodigo().toUpperCase())
-                .categoria(dto.getCategoria())
-                .nombreComercial(dto.getNombreComercial())
-                .principioActivo(dto.getPrincipioActivo())
-                .presentacion(dto.getPresentacion())
-                .especie(dto.getEspecie())
-                .stockActual(dto.getStockActual())
-                .precioUnitarioClp(dto.getPrecioUnitarioClp())
-                .activo(dto.getActivo() != null ? dto.getActivo() : true)
-                .build();
+        Producto producto =
+                Producto.builder()
+                        .codigo(dto.getCodigo().toUpperCase())
+                        .categoria(dto.getCategoria())
+                        .nombreComercial(dto.getNombreComercial())
+                        .principioActivo(dto.getPrincipioActivo())
+                        .presentacion(dto.getPresentacion())
+                        .especie(dto.getEspecie())
+                        .stockActual(dto.getStockActual())
+                        .precioUnitarioClp(dto.getPrecioUnitarioClp())
+                        .activo(dto.getActivo() != null ? dto.getActivo() : true)
+                        .build();
         return toDTO(repository.save(producto));
     }
 
     @Transactional
-    public ProductoDTO actualizarStock(String codigo, int nuevoStock) {
+    public ProductoDTO actualizarStock(
+        String codigo,
+        int nuevoStock
+    ) {
         if (nuevoStock < 0) {
             throw new IllegalArgumentException("El stock no puede ser negativo");
         }
-        Producto producto = repository.findById(codigo.toUpperCase())
-                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con código: " + codigo));
+        Producto producto =
+                repository
+                        .findById(codigo.toUpperCase())
+                        .orElseThrow(
+                                () ->
+                                        new EntityNotFoundException(
+                                                "Producto no encontrado con código: " + codigo));
         producto.setStockActual(nuevoStock);
         return toDTO(repository.save(producto));
     }
 
     @Transactional
     public void desactivar(String codigo) {
-        Producto producto = repository.findById(codigo.toUpperCase())
-                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con código: " + codigo));
+        Producto producto =
+                repository
+                        .findById(codigo.toUpperCase())
+                        .orElseThrow(
+                                () ->
+                                        new EntityNotFoundException(
+                                                "Producto no encontrado con código: " + codigo));
         producto.setActivo(false);
         repository.save(producto);
     }

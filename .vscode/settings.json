@@ -1,0 +1,5 @@
+{
+    "editor.wordWrap": "on",
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.debug.settings.onBuildFailureProceed": true
+}

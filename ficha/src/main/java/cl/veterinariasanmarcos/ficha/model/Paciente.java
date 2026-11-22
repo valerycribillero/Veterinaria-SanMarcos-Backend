@@ -9,18 +9,28 @@ import java.util.List;
 
 @Entity
 @Table(name = "paciente")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Paciente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 80)
+    @Column(
+        nullable = false,
+        length = 80
+    )
     private String nombre;
 
-    @Column(nullable = false, length = 40)
-    private String especie; 
+    @Column(
+        nullable = false,
+        length = 40
+    )
+    private String especie;
 
     @Column(length = 60)
     private String raza;
@@ -33,7 +43,10 @@ public class Paciente {
     @Column(nullable = false)
     private Long duenoId;
 
-    @Column(nullable = false, length = 120)
+    @Column(
+        nullable = false,
+        length = 120
+    )
     private String nombreDueno;
 
     @Column(length = 20)
@@ -45,7 +58,11 @@ public class Paciente {
     @Column(updatable = false)
     private LocalDateTime fechaCreacion;
 
-    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "paciente",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     @Builder.Default
     private List<Consulta> consultas = new ArrayList<>();
 

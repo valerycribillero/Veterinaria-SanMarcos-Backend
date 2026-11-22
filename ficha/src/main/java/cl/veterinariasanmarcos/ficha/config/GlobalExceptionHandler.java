@@ -16,25 +16,41 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity handleNotFound(EntityNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", 404,
-                "error", "Recurso no encontrado",
-                "mensaje", ex.getMessage()
-        ));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(
+                        Map.of(
+                            "timestamp",
+                            LocalDateTime.now(),
+                            "status",
+                            404,
+                            "error",
+                            "Recurso no encontrado",
+                            "mensaje",
+                            ex.getMessage()
+                        ));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(err ->
-                errores.put(err.getField(), err.getDefaultMessage()));
+        ex.getBindingResult()
+                .getFieldErrors()
+                .forEach(err -> errores.put(
+                    err.getField(),
+                    err.getDefaultMessage()
+                ));
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", 400,
-                "error", "Error de validación",
-                "detalles", errores
-        ));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(
+                        Map.of(
+                            "timestamp",
+                            LocalDateTime.now(),
+                            "status",
+                            400,
+                            "error",
+                            "Error de validación",
+                            "detalles",
+                            errores
+                        ));
     }
 }

@@ -2,7 +2,10 @@ package cl.veterinariasanmarcos.compras.dto;
 
 import lombok.*;
 
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DetalleCompraResponseDTO {
     private Long id;
     private String codigoProducto;

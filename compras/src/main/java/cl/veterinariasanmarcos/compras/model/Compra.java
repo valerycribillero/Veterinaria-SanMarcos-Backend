@@ -8,7 +8,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "compras")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Compra {
 
     @Id
@@ -18,7 +22,10 @@ public class Compra {
     @Column(nullable = false)
     private Long duenoId; // ID del dueño desde el microservicio Usuarios
 
-    @Column(nullable = false, length = 120)
+    @Column(
+        nullable = false,
+        length = 120
+    )
     private String nombreDueno;
 
     private Long pacienteId; // Opcional: mascota para la cual se compra el producto
@@ -30,7 +37,10 @@ public class Compra {
     private LocalDateTime fechaCompra;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(
+        nullable = false,
+        length = 20
+    )
     private EstadoCompra estado;
 
     @Column(nullable = false)
@@ -39,7 +49,11 @@ public class Compra {
     @Column(length = 255)
     private String observacionCliente;
 
-    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "compra",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     @Builder.Default
     private List<DetalleCompra> detalles = new ArrayList<>();
 

@@ -22,13 +22,23 @@ public class ContactoService {
     }
 
     public Contacto crear(NuevoContacto datos) {
-        Contacto contacto = new Contacto(datos.nombreCompleto(), datos.correo(), datos.telefono(),
-                datos.asunto(), datos.mensaje());
+        Contacto contacto =
+                new Contacto(
+                    datos.nombreCompleto(),
+                    datos.correo(),
+                    datos.telefono(),
+                    datos.asunto(),
+                    datos.mensaje()
+                );
         return repository.save(contacto);
     }
 
     public List<Contacto> listar() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "fechaCreacion", "id"));
+        return repository.findAll(Sort.by(
+            Sort.Direction.DESC,
+            "fechaCreacion",
+            "id"
+        ));
     }
 
     @Transactional
@@ -44,7 +54,13 @@ public class ContactoService {
     }
 
     private Contacto buscar(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contacto no encontrado"));
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                    HttpStatus.NOT_FOUND,
+                                    "Contacto no encontrado"
+                                ));
     }
 }
