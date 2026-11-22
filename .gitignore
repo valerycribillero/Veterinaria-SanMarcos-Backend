@@ -1,2 +1,5 @@
 # Archivos generados al compilar los microservicios Java
 target/
+
+# Credenciales locales para Docker
+.env
