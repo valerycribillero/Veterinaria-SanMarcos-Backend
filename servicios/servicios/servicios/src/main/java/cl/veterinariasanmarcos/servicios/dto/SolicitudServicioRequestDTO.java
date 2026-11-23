@@ -3,6 +3,7 @@ package cl.veterinariasanmarcos.servicios.dto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ public class SolicitudServicioRequestDTO {
     private String codigoServicio;
 
     @NotNull(message = "El ID del dueño es obligatorio")
+    @Positive(message = "El ID del dueño debe ser positivo")
     private Long duenoId;
 
     @NotBlank(message = "El nombre del dueño es obligatorio")
@@ -21,6 +23,7 @@ public class SolicitudServicioRequestDTO {
     private String telefonoDueno;
 
     @NotNull(message = "El ID del paciente es obligatorio")
+    @Positive(message = "El ID del paciente debe ser positivo")
     private Long pacienteId;
 
     @NotBlank(message = "El nombre del paciente es obligatorio")
