@@ -24,6 +24,7 @@ public class ConsultaRequestDTO {
     @NotBlank(message = "El tipo de servicio es obligatorio")
     private String tipoServicio;
 
+    @Positive(message = "El peso debe ser mayor que cero")
     private Double pesoKg;
 
     @NotBlank(message = "El motivo de consulta es obligatorio")
