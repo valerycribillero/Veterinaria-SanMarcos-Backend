@@ -2,6 +2,7 @@ package cl.veterinariasanmarcos.ficha.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ public class PacienteRequestDTO {
 
     private String raza;
     private String sexo;
+    @PastOrPresent(message = "La fecha de nacimiento no puede ser futura")
     private LocalDate fechaNacimiento;
 
     @NotNull(message = "El ID del dueño es obligatorio")
