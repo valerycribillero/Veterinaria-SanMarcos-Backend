@@ -22,6 +22,13 @@ public class ConsultaService {
     private final PacienteRepository pacienteRepository;
     private final VacunaRegistroRepository vacunaRepository;
 
+    @Transactional(readOnly = true)
+    public ConsultaResponseDTO obtenerPorId(Long id) {
+        Consulta consulta = consultaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Consulta no encontrada"));
+        return toResponseDTO(consulta);
+    }
+
     @Transactional
     public ConsultaResponseDTO registrarConsulta(ConsultaRequestDTO dto) {
         Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
@@ -61,13 +68,6 @@ public class ConsultaService {
         return consultaRepository.findByPacienteIdOrderByFechaConsultaDesc(pacienteId).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public ConsultaResponseDTO obtenerPorId(Long id) {
-        Consulta consulta = consultaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Consulta no encontrada con ID: " + id));
-        return toResponseDTO(consulta);
     }
 
     @Transactional(readOnly = true)

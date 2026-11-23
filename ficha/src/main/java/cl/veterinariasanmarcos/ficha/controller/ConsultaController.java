@@ -26,8 +26,8 @@ public class ConsultaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ConsultaResponseDTO> obtenerPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(consultaService.obtenerPorId(id));
+    public ConsultaResponseDTO obtenerPorId(@PathVariable Long id) {
+        return consultaService.obtenerPorId(id);
     }
 
     @GetMapping("/paciente/{pacienteId}")
