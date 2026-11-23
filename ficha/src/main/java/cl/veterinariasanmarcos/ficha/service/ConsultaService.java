@@ -64,6 +64,13 @@ public class ConsultaService {
     }
 
     @Transactional(readOnly = true)
+    public ConsultaResponseDTO obtenerPorId(Long id) {
+        Consulta consulta = consultaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Consulta no encontrada con ID: " + id));
+        return toResponseDTO(consulta);
+    }
+
+    @Transactional(readOnly = true)
     public List<VacunaRegistroDTO> obtenerHistorialVacunas(Long pacienteId) {
         return vacunaRepository.findByConsultaPacienteIdOrderByFechaVencimientoAsc(pacienteId).stream()
                 .map(this::toVacunaDTO)
@@ -96,6 +103,7 @@ public class ConsultaService {
         return ConsultaResponseDTO.builder()
                 .id(c.getId())
                 .pacienteId(c.getPaciente().getId())
+                .duenoId(c.getPaciente().getDuenoId())
                 .nombrePaciente(c.getPaciente().getNombre())
                 .veterinarioId(c.getVeterinarioId())
                 .nombreVeterinario(c.getNombreVeterinario())

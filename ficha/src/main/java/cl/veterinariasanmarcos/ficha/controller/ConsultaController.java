@@ -25,6 +25,11 @@ public class ConsultaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(consultaService.registrarConsulta(dto));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ConsultaResponseDTO> obtenerPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(consultaService.obtenerPorId(id));
+    }
+
     @GetMapping("/paciente/{pacienteId}")
     public ResponseEntity<List<ConsultaResponseDTO>> historialPorPaciente(@PathVariable Long pacienteId) {
         return ResponseEntity.ok(consultaService.listarPorPaciente(pacienteId));
