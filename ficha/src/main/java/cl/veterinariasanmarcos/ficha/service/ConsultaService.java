@@ -80,6 +80,9 @@ public class ConsultaService {
 
     @Transactional(readOnly = true)
     public List<ConsultaResponseDTO> reporteAtencionesPorPeriodo(LocalDateTime inicio, LocalDateTime fin) {
+        if (inicio.isAfter(fin)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
+        }
         return consultaRepository.findByFechaConsultaBetweenOrderByFechaConsultaDesc(inicio, fin).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
