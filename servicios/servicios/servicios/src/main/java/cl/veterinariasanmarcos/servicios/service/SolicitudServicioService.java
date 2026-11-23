@@ -126,6 +126,9 @@ public class SolicitudServicioService {
 
     @Transactional(readOnly = true)
     public List<SolicitudServicioResponseDTO> agendaPorRango(LocalDateTime inicio, LocalDateTime fin) {
+        if (inicio.isAfter(fin)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
+        }
         return solicitudRepository.findByFechaHoraSolicitadaBetweenOrderByFechaHoraSolicitadaAsc(inicio, fin).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
