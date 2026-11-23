@@ -1,0 +1,47 @@
+package cl.veterinariasanmarcos.servicios.integration;
+
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.server.ResponseStatusException;
+
+@Component
+public class FichaClient {
+
+    private final RestClient restClient;
+
+    public FichaClient(@Value("${services.ficha.base-url}") String baseUrl) {
+        this.restClient = RestClient.create(baseUrl);
+    }
+
+    public FichaPacienteResponse obtenerPaciente(Long pacienteId) {
+        try {
+            FichaPacienteResponse response = restClient.get()
+                    .uri("/api/fichas/{id}", pacienteId)
+                    .retrieve()
+                    .body(FichaPacienteResponse.class);
+            if (response == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Ficha devolvió una respuesta vacía");
+            }
+            return response;
+        } catch (RestClientResponseException ex) {
+            if (ex.getStatusCode().value() == HttpStatus.NOT_FOUND.value()) {
+                throw new EntityNotFoundException("Paciente no encontrado con ID: " + pacienteId);
+            }
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_GATEWAY,
+                    "Ficha respondió con HTTP " + ex.getStatusCode().value(),
+                    ex
+            );
+        } catch (ResourceAccessException ex) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "No fue posible conectar con ficha", ex);
+        } catch (RestClientException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Respuesta inválida desde ficha", ex);
+        }
+    }
+}

@@ -5,7 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDate;
 
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class VacunaRegistroDTO {
     private Long id;
 

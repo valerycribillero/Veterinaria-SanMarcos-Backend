@@ -23,27 +23,40 @@ public class CompraService {
 
     @Transactional
     public CompraResponseDTO crearCompra(CompraRequestDTO dto) {
-        Compra compra = Compra.builder()
-                .duenoId(dto.getDuenoId())
-                .nombreDueno(dto.getNombreDueno())
-                .pacienteId(dto.getPacienteId())
-                .nombrePaciente(dto.getNombrePaciente())
-                .observacionCliente(dto.getObservacionCliente())
-                .estado(EstadoCompra.PENDIENTE)
-                .totalClp(0)
-                .build();
+        Compra compra =
+                Compra.builder()
+                        .duenoId(dto.getDuenoId())
+                        .nombreDueno(dto.getNombreDueno())
+                        .pacienteId(dto.getPacienteId())
+                        .nombrePaciente(dto.getNombrePaciente())
+                        .observacionCliente(dto.getObservacionCliente())
+                        .estado(EstadoCompra.PENDIENTE)
+                        .totalClp(0)
+                        .build();
 
         List<DetalleCompra> detalles = new ArrayList<>();
         int totalGeneral = 0;
 
         for (ItemCompraRequestDTO itemReq : dto.getItems()) {
-            Producto producto = productoRepository.findById(itemReq.getCodigoProducto().toUpperCase())
-                    .filter(Producto::getActivo)
-                    .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado: " + itemReq.getCodigoProducto()));
+            Producto producto =
+                    productoRepository
+                            .findById(itemReq.getCodigoProducto().toUpperCase())
+                            .filter(Producto::getActivo)
+                            .orElseThrow(
+                                    () ->
+                                            new EntityNotFoundException(
+                                                    "Producto no encontrado: "
+                                                            + itemReq.getCodigoProducto()));
 
             if (producto.getStockActual() < itemReq.getCantidad()) {
-                throw new IllegalStateException("Stock insuficiente para " + producto.getNombreComercial()
-                        + " (disponible: " + producto.getStockActual() + ", solicitado: " + itemReq.getCantidad() + ")");
+                throw new IllegalStateException(
+                        "Stock insuficiente para "
+                                + producto.getNombreComercial()
+                                + " (disponible: "
+                                + producto.getStockActual()
+                                + ", solicitado: "
+                                + itemReq.getCantidad()
+                                + ")");
             }
 
             // Descontar stock
@@ -53,13 +66,14 @@ public class CompraService {
             int subtotal = producto.getPrecioUnitarioClp() * itemReq.getCantidad();
             totalGeneral += subtotal;
 
-            DetalleCompra detalle = DetalleCompra.builder()
-                    .compra(compra)
-                    .producto(producto)
-                    .cantidad(itemReq.getCantidad())
-                    .precioUnitarioClp(producto.getPrecioUnitarioClp())
-                    .subtotalClp(subtotal)
-                    .build();
+            DetalleCompra detalle =
+                    DetalleCompra.builder()
+                            .compra(compra)
+                            .producto(producto)
+                            .cantidad(itemReq.getCantidad())
+                            .precioUnitarioClp(producto.getPrecioUnitarioClp())
+                            .subtotalClp(subtotal)
+                            .build();
 
             detalles.add(detalle);
         }
@@ -72,7 +86,9 @@ public class CompraService {
 
     @Transactional(readOnly = true)
     public List<CompraResponseDTO> listarTodas() {
-        return compraRepository.findAll().stream().map(this::toResponseDTO).collect(Collectors.toList());
+        return compraRepository.findAll().stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -84,18 +100,32 @@ public class CompraService {
 
     @Transactional(readOnly = true)
     public CompraResponseDTO obtenerPorId(Long id) {
-        Compra compra = compraRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Compra no encontrada con ID: " + id));
+        Compra compra =
+                compraRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new EntityNotFoundException(
+                                                "Compra no encontrada con ID: " + id));
         return toResponseDTO(compra);
     }
 
     @Transactional
-    public CompraResponseDTO cambiarEstado(Long id, EstadoCompra nuevoEstado) {
-        Compra compra = compraRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Compra no encontrada con ID: " + id));
+    public CompraResponseDTO cambiarEstado(
+        Long id,
+        EstadoCompra nuevoEstado
+    ) {
+        Compra compra =
+                compraRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new EntityNotFoundException(
+                                                "Compra no encontrada con ID: " + id));
 
         if (compra.getEstado() == EstadoCompra.CANCELADA) {
-            throw new IllegalStateException("No se puede modificar una compra que ya fue cancelada");
+            throw new IllegalStateException(
+                    "No se puede modificar una compra que ya fue cancelada");
         }
 
         // Si se cancela la compra, devolver el stock al inventario
@@ -122,18 +152,23 @@ public class CompraService {
     }
 
     private CompraResponseDTO toResponseDTO(Compra c) {
-        List<DetalleCompraResponseDTO> detallesDTO = c.getDetalles().stream()
-                .map(d -> DetalleCompraResponseDTO.builder()
-                        .id(d.getId())
-                        .codigoProducto(d.getProducto().getCodigo())
-                        .nombreComercial(d.getProducto().getNombreComercial())
-                        .principioActivo(d.getProducto().getPrincipioActivo())
-                        .presentacion(d.getProducto().getPresentacion())
-                        .cantidad(d.getCantidad())
-                        .precioUnitarioClp(d.getPrecioUnitarioClp())
-                        .subtotalClp(d.getSubtotalClp())
-                        .build())
-                .collect(Collectors.toList());
+        List<DetalleCompraResponseDTO> detallesDTO =
+                c.getDetalles().stream()
+                        .map(
+                                d ->
+                                        DetalleCompraResponseDTO.builder()
+                                                .id(d.getId())
+                                                .codigoProducto(d.getProducto().getCodigo())
+                                                .nombreComercial(
+                                                        d.getProducto().getNombreComercial())
+                                                .principioActivo(
+                                                        d.getProducto().getPrincipioActivo())
+                                                .presentacion(d.getProducto().getPresentacion())
+                                                .cantidad(d.getCantidad())
+                                                .precioUnitarioClp(d.getPrecioUnitarioClp())
+                                                .subtotalClp(d.getSubtotalClp())
+                                                .build())
+                        .collect(Collectors.toList());
 
         return CompraResponseDTO.builder()
                 .id(c.getId())

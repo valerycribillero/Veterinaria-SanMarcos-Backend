@@ -10,6 +10,11 @@ import java.util.List;
 @Repository
 public interface CompraRepository extends JpaRepository<Compra, Long> {
     List<Compra> findByDuenoIdOrderByFechaCompraDesc(Long duenoId);
+
     List<Compra> findByEstadoOrderByFechaCompraDesc(EstadoCompra estado);
-    List<Compra> findByFechaCompraBetweenOrderByFechaCompraDesc(LocalDateTime inicio, LocalDateTime fin);
+
+    List<Compra> findByFechaCompraBetweenOrderByFechaCompraDesc(
+        LocalDateTime inicio,
+        LocalDateTime fin
+    );
 }

@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Eureka Server (8761)",
+            "request": "launch",
+            "mainClass": "cl.veterinariasanmarcos.eureka.EurekaServerApplication",
+            "projectName": "eureka-server"
+        },
+        {
+            "type": "java",
+            "name": "API Gateway (8080)",
+            "request": "launch",
+            "mainClass": "cl.veterinariasanmarcos.gateway.ApiGatewayApplication",
+            "projectName": "api-gateway"
+        },
+        {
+            "type": "java",
+            "name": "Microservicio actual con Eureka",
+            "request": "launch",
+            "mainClass": "${file}",
+            "env": {
+                "EUREKA_CLIENT_ENABLED": "true",
+                "EUREKA_INSTANCE_HOSTNAME": "localhost"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "MensajeriaServiceApplication",
+            "request": "launch",
+            "mainClass": "cl.veterinariasanmarcos.mensajeria.MensajeriaServiceApplication",
+            "projectName": "mensajeria-service"
+        }
+    ]
+}

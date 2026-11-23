@@ -8,7 +8,10 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ConsultaRequestDTO {
     @NotNull(message = "El ID del paciente es obligatorio")
     @Positive(message = "El ID del paciente debe ser positivo")
@@ -37,6 +40,5 @@ public class ConsultaRequestDTO {
     private String indicaciones;
     private LocalDate proximoControl;
 
-    @Valid
-    private List<VacunaRegistroDTO> vacunasAplicadas;
+    @Valid private List<VacunaRegistroDTO> vacunasAplicadas;
 }
