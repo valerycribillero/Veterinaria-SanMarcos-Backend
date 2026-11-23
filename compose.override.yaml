@@ -1,0 +1,7 @@
+services:
+  detalleconsultas:
+    environment:
+      FICHA_SERVICE_URL: http://ficha:8085
+  servicios:
+    environment:
+      FICHA_SERVICE_URL: http://ficha:8085
