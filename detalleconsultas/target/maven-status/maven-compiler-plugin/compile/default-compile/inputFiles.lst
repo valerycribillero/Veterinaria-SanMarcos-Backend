@@ -1,0 +1,12 @@
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\config\GlobalExceptionHandler.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\controller\DetalleConsultaController.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\DetalleConsultasApplication.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\dto\DetalleConsultaRequestDTO.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\dto\DetalleConsultaResponseDTO.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\dto\ResumenConsultaClinicaDTO.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\integration\FichaClient.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\integration\FichaConsultaResponse.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\model\DetalleConsulta.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\model\TipoDetalleClinico.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\repository\DetalleConsultaRepository.java
+C:\Users\orian\OneDrive\Desktop\Veterinaria-SanMarcos-Backend\detalleconsultas\src\main\java\cl\veterinariasanmarcos\detalleconsultas\service\DetalleConsultaService.java
