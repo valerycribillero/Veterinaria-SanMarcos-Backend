@@ -18,6 +18,8 @@ import cl.veterinariasanmarcos.agenda.dto.DatosCita;
 public class Cita {
     public enum Estado {
         RESERVADA,
+        EN_ESPERA,
+        EN_ATENCION,
         ATENDIDA,
         CANCELADA
     }
@@ -131,6 +133,14 @@ public class Cita {
 
     public void atender() {
         estado = Estado.ATENDIDA;
+    }
+
+    public void confirmarLlegada() {
+        estado = Estado.EN_ESPERA;
+    }
+
+    public void llamar() {
+        estado = Estado.EN_ATENCION;
     }
 
     public Long getId() {
