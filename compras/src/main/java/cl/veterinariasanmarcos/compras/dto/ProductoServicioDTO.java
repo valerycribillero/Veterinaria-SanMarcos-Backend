@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProductoServicioDTO {
-    @NotBlank(message = "El código es obligatorio")
+
+    @NotBlank(message = "El código del ítem es obligatorio")
     private String codigo;
 
     @NotNull(message = "El tipo de ítem es obligatorio")
@@ -33,17 +34,11 @@ public class ProductoServicioDTO {
     @NotBlank(message = "La especie es obligatoria")
     private String especie;
 
-    @Min(
-        value = 0,
-        message = "El stock no puede ser negativo"
-    )
+    @Min(value = 0, message = "El stock no puede ser negativo")
     private Integer stockActual;
 
     @NotNull(message = "El precio en CLP es obligatorio")
-    @Min(
-        value = 0,
-        message = "El precio no puede ser negativo"
-    )
+    @Min(value = 0, message = "El precio no puede ser negativo")
     private Integer precioClp;
 
     private String observaciones;

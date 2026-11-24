@@ -22,7 +22,8 @@ public class HorarioController {
 
     @Operation(
         summary = "Crear horario",
-        description = "Registra un horario para la agenda veterinaria."
+        description = "Registra un horario futuro de lunes a viernes de 08:30 a 21:00 "
+                + "o el sábado de 09:00 a 19:30. La veterinaria cierra los domingos."
     )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

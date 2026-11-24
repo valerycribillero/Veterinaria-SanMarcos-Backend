@@ -12,6 +12,7 @@ import java.util.List;
 public class ConsultaResponseDTO {
     private Long id;
     private Long pacienteId;
+    private Long duenoId;
     private String nombrePaciente;
     private Long veterinarioId;
     private String nombreVeterinario;

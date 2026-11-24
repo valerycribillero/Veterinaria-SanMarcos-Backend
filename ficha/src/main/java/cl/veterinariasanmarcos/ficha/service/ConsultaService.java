@@ -114,16 +114,11 @@ public class ConsultaService {
     }
 
     @Transactional(readOnly = true)
-    public List<ConsultaResponseDTO> reporteAtencionesPorPeriodo(
-        LocalDateTime inicio,
-        LocalDateTime fin
-    ) {
-        return consultaRepository
-                .findByFechaConsultaBetweenOrderByFechaConsultaDesc(
-                    inicio,
-                    fin
-                )
-                .stream()
+    public List<ConsultaResponseDTO> reporteAtencionesPorPeriodo(LocalDateTime inicio, LocalDateTime fin) {
+        if (inicio.isAfter(fin)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
+        }
+        return consultaRepository.findByFechaConsultaBetweenOrderByFechaConsultaDesc(inicio, fin).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -139,6 +134,7 @@ public class ConsultaService {
         return ConsultaResponseDTO.builder()
                 .id(c.getId())
                 .pacienteId(c.getPaciente().getId())
+                .duenoId(c.getPaciente().getDuenoId())
                 .nombrePaciente(c.getPaciente().getNombre())
                 .veterinarioId(c.getVeterinarioId())
                 .nombreVeterinario(c.getNombreVeterinario())

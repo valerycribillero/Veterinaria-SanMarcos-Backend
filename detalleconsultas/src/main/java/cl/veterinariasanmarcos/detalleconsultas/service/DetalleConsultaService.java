@@ -1,6 +1,8 @@
 package cl.veterinariasanmarcos.detalleconsultas.service;
 
 import cl.veterinariasanmarcos.detalleconsultas.dto.*;
+import cl.veterinariasanmarcos.detalleconsultas.integration.FichaClient;
+import cl.veterinariasanmarcos.detalleconsultas.integration.FichaConsultaResponse;
 import cl.veterinariasanmarcos.detalleconsultas.model.DetalleConsulta;
 import cl.veterinariasanmarcos.detalleconsultas.model.TipoDetalleClinico;
 import cl.veterinariasanmarcos.detalleconsultas.repository.DetalleConsultaRepository;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,13 +21,22 @@ import java.util.stream.Collectors;
 public class DetalleConsultaService {
 
     private final DetalleConsultaRepository repository;
+    private final FichaClient fichaClient;
 
     @Transactional
     public DetalleConsultaResponseDTO registrarDetalle(DetalleConsultaRequestDTO dto) {
+        FichaConsultaResponse consulta = fichaClient.obtenerConsulta(dto.getConsultaId());
+        if (!Objects.equals(consulta.pacienteId(), dto.getPacienteId())) {
+            throw new IllegalArgumentException("La consulta no corresponde al paciente indicado");
+        }
+        if (!Objects.equals(consulta.duenoId(), dto.getDuenoId())) {
+            throw new IllegalArgumentException("La consulta no corresponde al dueño indicado");
+        }
+
         DetalleConsulta detalle = DetalleConsulta.builder()
                 .consultaId(dto.getConsultaId())
                 .pacienteId(dto.getPacienteId())
-                .nombrePaciente(dto.getNombrePaciente())
+                .nombrePaciente(consulta.nombrePaciente())
                 .duenoId(dto.getDuenoId())
                 .tipoDetalle(dto.getTipoDetalle())
                 .codigoCatalogo(dto.getCodigoCatalogo() != null ? dto.getCodigoCatalogo().toUpperCase() : null)

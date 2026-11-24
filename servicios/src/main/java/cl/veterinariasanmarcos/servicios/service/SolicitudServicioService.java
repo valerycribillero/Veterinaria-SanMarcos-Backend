@@ -1,6 +1,8 @@
 package cl.veterinariasanmarcos.servicios.service;
 
 import cl.veterinariasanmarcos.servicios.dto.*;
+import cl.veterinariasanmarcos.servicios.integration.FichaClient;
+import cl.veterinariasanmarcos.servicios.integration.FichaPacienteResponse;
 import cl.veterinariasanmarcos.servicios.model.*;
 import cl.veterinariasanmarcos.servicios.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,21 +21,30 @@ public class SolicitudServicioService {
 
     private final SolicitudServicioRepository solicitudRepository;
     private final ServicioCatalogoRepository catalogoRepository;
+    private final FichaClient fichaClient;
 
     @Transactional
     public SolicitudServicioResponseDTO crearSolicitud(SolicitudServicioRequestDTO dto) {
         ServicioCatalogo servicio = catalogoRepository.findById(dto.getCodigoServicio().toUpperCase())
                 .filter(ServicioCatalogo::getActivo)
                 .orElseThrow(() -> new EntityNotFoundException("Servicio no disponible: " + dto.getCodigoServicio()));
+        FichaPacienteResponse paciente = fichaClient.obtenerPaciente(dto.getPacienteId());
+
+        if (!Boolean.TRUE.equals(paciente.activo())) {
+            throw new EntityNotFoundException("Paciente no activo con ID: " + dto.getPacienteId());
+        }
+        if (!Objects.equals(paciente.duenoId(), dto.getDuenoId())) {
+            throw new IllegalArgumentException("El paciente no pertenece al dueño indicado");
+        }
 
         SolicitudServicio solicitud = SolicitudServicio.builder()
                 .servicio(servicio)
-                .duenoId(dto.getDuenoId())
-                .nombreDueno(dto.getNombreDueno())
-                .telefonoDueno(dto.getTelefonoDueno())
-                .pacienteId(dto.getPacienteId())
-                .nombrePaciente(dto.getNombrePaciente())
-                .especiePaciente(dto.getEspeciePaciente())
+                .duenoId(paciente.duenoId())
+                .nombreDueno(paciente.nombreDueno())
+                .telefonoDueno(paciente.telefonoDueno())
+                .pacienteId(paciente.id())
+                .nombrePaciente(paciente.nombre())
+                .especiePaciente(paciente.especie())
                 .motivo(dto.getMotivo())
                 .fechaHoraSolicitada(dto.getFechaHoraSolicitada())
                 .precioReferencialClp(servicio.getPrecioClp())
@@ -126,6 +138,9 @@ public class SolicitudServicioService {
 
     @Transactional(readOnly = true)
     public List<SolicitudServicioResponseDTO> agendaPorRango(LocalDateTime inicio, LocalDateTime fin) {
+        if (inicio.isAfter(fin)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
+        }
         return solicitudRepository.findByFechaHoraSolicitadaBetweenOrderByFechaHoraSolicitadaAsc(inicio, fin).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());

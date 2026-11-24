@@ -142,14 +142,11 @@ public class CompraService {
     }
 
     @Transactional(readOnly = true)
-    public List<CompraResponseDTO> reporteVentasPorPeriodo(
-        LocalDateTime inicio,
-        LocalDateTime fin
-    ) {
-        return compraRepository.findByFechaCompraBetweenOrderByFechaCompraDesc(
-            inicio,
-            fin
-        ).stream()
+    public List<CompraResponseDTO> reporteVentasPorPeriodo(LocalDateTime inicio, LocalDateTime fin) {
+        if (inicio.isAfter(fin)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
+        }
+        return compraRepository.findByFechaCompraBetweenOrderByFechaCompraDesc(inicio, fin).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }

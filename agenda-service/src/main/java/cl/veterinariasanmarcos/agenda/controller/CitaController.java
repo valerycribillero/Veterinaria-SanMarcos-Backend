@@ -73,6 +73,24 @@ public class CitaController {
     }
 
     @Operation(
+        summary = "Confirmar llegada",
+        description = "Deja la cita del día en espera para que el veterinario llame al paciente."
+    )
+    @PutMapping("/{id}/llegada")
+    public Cita confirmarLlegada(@PathVariable Long id) {
+        return service.confirmarLlegada(id);
+    }
+
+    @Operation(
+        summary = "Llamar al paciente",
+        description = "Cambia a en atención una cita que estaba en espera."
+    )
+    @PutMapping("/{id}/llamar")
+    public Cita llamar(@PathVariable Long id) {
+        return service.llamar(id);
+    }
+
+    @Operation(
         summary = "Cancelar cita",
         description = "Cancela la cita identificada por su ID."
     )

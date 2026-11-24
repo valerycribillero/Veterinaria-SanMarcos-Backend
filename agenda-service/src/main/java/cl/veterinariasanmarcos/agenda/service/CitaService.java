@@ -16,6 +16,7 @@ import cl.veterinariasanmarcos.agenda.repository.CitaRepository;
 @Service
 @Transactional
 public class CitaService {
+    private static final ZoneId ZONA = ZoneId.of("America/Santiago");
     private final CitaRepository repository;
     private final HorarioService horarios;
 
@@ -35,7 +36,7 @@ public class CitaService {
         Cita cita = new Cita(
             datos,
             horario,
-            LocalDateTime.now(ZoneId.of("America/Santiago"))
+            LocalDateTime.now(ZONA)
         );
         return repository.saveAndFlush(cita);
     }
@@ -115,8 +116,37 @@ public class CitaService {
         if (cita.getEstado() == Cita.Estado.ATENDIDA) {
             return cita;
         }
-        validarReservada(cita);
+        if (cita.getEstado() == Cita.Estado.CANCELADA) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "La cita está cancelada");
+        }
         cita.atender();
+        return cita;
+    }
+
+    public Cita confirmarLlegada(Long id) {
+        Cita cita = buscarBloqueada(id);
+        if (cita.getEstado() == Cita.Estado.EN_ESPERA) return cita;
+        validarReservada(cita);
+        if (!cita.getFecha().equals(LocalDate.now(ZONA))) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Solo puedes confirmar la llegada el día de la cita"
+            );
+        }
+        cita.confirmarLlegada();
+        return cita;
+    }
+
+    public Cita llamar(Long id) {
+        Cita cita = buscarBloqueada(id);
+        if (cita.getEstado() == Cita.Estado.EN_ATENCION) return cita;
+        if (cita.getEstado() != Cita.Estado.EN_ESPERA) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Recepción debe confirmar la llegada antes de llamar al paciente"
+            );
+        }
+        cita.llamar();
         return cita;
     }
 
