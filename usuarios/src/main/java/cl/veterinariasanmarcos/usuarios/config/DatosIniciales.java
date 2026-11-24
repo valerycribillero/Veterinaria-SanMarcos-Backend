@@ -41,6 +41,12 @@ public class DatosIniciales implements CommandLineRunner {
             "admin@vetsanmarcos.cl",
             Rol.ADMINISTRADOR
         );
+
+        crearUsuario(
+            "Ángela",
+            "angela@vetsanmarcos.cl",
+            Rol.RECEPCIONISTA
+        );
     }
 
     private void crearUsuario(

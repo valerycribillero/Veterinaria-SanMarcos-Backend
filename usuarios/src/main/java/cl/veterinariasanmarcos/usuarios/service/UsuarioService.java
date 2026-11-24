@@ -63,9 +63,7 @@ public class UsuarioService {
             );
         }
 
-        String rol = usuario.getRol() == Rol.RECEPCIONISTA
-            ? "administrador"
-            : usuario.getRol().name().toLowerCase(Locale.ROOT);
+        String rol = usuario.getRol().name().toLowerCase(Locale.ROOT);
 
         return new SesionUsuario(
             usuario.getId(),
